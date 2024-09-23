@@ -11,7 +11,8 @@ build:
 set-conf:
     #!/usr/bin/env bash
     sudo rm -rf /etc/nixos/*
-    sudo cp *.nix /etc/nixos/
+    cp *.nix /etc/nixos/
+    cp flake.lock /etc/nixos/
 
 prof-install:
     nix profile install --experimental-features 'nix-command flakes'
