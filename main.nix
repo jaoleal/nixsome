@@ -6,14 +6,10 @@
     just
     distrobox
     yubikey-manager
-    just
     usbutils
     nixpkgs-fmt
     nixd
     gnupg
-    rustup
-    pkg-config
-    openssl
     clang
   ];
   programs = {

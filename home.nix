@@ -12,12 +12,14 @@
   services = {
     gpg-agent = {
       enable = true;
+      #pinentryPackage = pkgs.pinentry-qt;
       #Enable the gpg-agent to act as a ssh-agent. 
       enableSshSupport = true;
-      defaultCacheTtlSsh = 4000;
-
-      defaultCacheTtl = 34560000;
-      maxCacheTtl = 34560000;
+      
+      defaultCacheTtlSsh = 14400;
+      defaultCacheTtl = 14400;
+      maxCacheTtl = 14400;
+      maxCacheTtlSsh = 14400;
     };
   };
   programs = {
