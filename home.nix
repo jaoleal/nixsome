@@ -57,6 +57,10 @@
       enable = true;
       package = pkgs.zed-editor;
       userSettings = {
+        buffer_font_family = "DroidSansMono";
+        scrollbar = {
+          show = "never";
+        };
         languages = {
           Nix = {
             language_servers = [
@@ -71,6 +75,7 @@
             };
           };
         };
+
         lsp = {
           rust-analyzer = {
             binary = {

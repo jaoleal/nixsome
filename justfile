@@ -1,12 +1,13 @@
 default:
     @just --list
 
-set-build:
+set-build-desk:
     @just set-conf
-    @just build
+    sudo nixos-rebuild switch --flake /etc/nixos/#desktop
 
-build:
-    sudo nixos-rebuild switch --flake /etc/nixos/#mainConfig
+set-build-note:
+    @just set-conf
+    sudo nixos-rebuild switch --flake /etc/nixos/#notebook
 
 set-conf:
     #!/usr/bin/env bash

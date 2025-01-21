@@ -14,10 +14,18 @@
     in
     {
       nixosConfigurations = {
-        mainConfig = pkgs.lib.nixosSystem {
+        desktop = pkgs.lib.nixosSystem {
           system = system;
           modules = [
-            ./main.nix
+            ./common.nix
+            ./desktop.nix
+          ];
+        };
+        notebook = pkgs.lib.nixosSystem {
+          system = system;
+          modules = [
+            ./common.nix
+            ./notebook.nix
           ];
         };
       };
