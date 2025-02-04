@@ -25,7 +25,7 @@
   users.users.jaoleal = {
     isNormalUser = true;
     description = "Joao Leal";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
   };
   services.tailscale.enable = true;
   services.xserver = {

@@ -22,6 +22,11 @@
       pinentryPackage = pkgs.pinentry-gnome3;
     };
   };
+  fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    fira-code
+    droid-sans-mono
+  ];
   programs = {
     git = {
       enable = true;
