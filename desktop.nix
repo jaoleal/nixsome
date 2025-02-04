@@ -12,4 +12,14 @@
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
+
+  programs.virt-manager.enable = true;
+
+  users.groups.libvirtd.members = [ "jaoleal" ];
+
+  virtualisation = {
+    libvirtd.enable = true;
+    spiceUSBRedirection.enable = true;
+  };
+
 }
