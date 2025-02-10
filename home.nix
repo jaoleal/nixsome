@@ -22,12 +22,12 @@
       pinentryPackage = pkgs.pinentry-gnome3;
     };
   };
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-    fira-code
-    droid-sans-mono
-  ];
+
   programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
     git = {
       enable = true;
       userEmail = "jgleal@protonmail.com";
@@ -58,42 +58,73 @@
         { id = "ncmflpbbagcnakkolfpcpogheckolnad"; } #Nostr Profiles
       ];
     };
-    zed-editor = {
-      enable = true;
-      package = pkgs.zed-editor;
-      userSettings = {
-        buffer_font_family = "DroidSansMono";
-        scrollbar = {
-          show = "never";
-        };
-        languages = {
-          Nix = {
-            language_servers = [
-              "nil"
-              "!nixd"
-            ];
-            formatter = {
-              external =
-                {
-                  command = "nixpkgs-fmt";
-                };
+    zed-editor =
+      {
+        enable = true;
+        package = pkgs.zed-editor;
+        userSettings =
+          {
+            buffer_font_family = "Source Code Pro";
+            restore_on_startup = "last_workspace";
+            autoscroll_on_clicks = true;
+            load_direnv = "direct";
+            base_keymap = "VSCode";
+            theme = {
+              mode = "system";
+              dark = "Gruvbox Dark Soft";
+              light = "Gruvbox Material";
             };
-          };
-        };
+            terminal = {
+              dock = "left";
+              copy_on_select = true;
+              font_family = "Ubuntu Nerd Font";
+            };
+            current_line_highlight = "line";
+            inline_completions_disabled_in = {
+              disabled_in = [ "comment" "string" ];
+            };
+            autosave = {
+              after_delay = {
+                milliseconds = 1000;
+              };
+            };
 
-        lsp = {
-          rust-analyzer = {
-            binary = {
-              path = "/run/current-system/sw/bin/rust-analyzer";
+            scrollbar = {
+              show = "auto";
+              cursors = false;
+              axes = {
+                horizontal = true;
+                vertical = true;
+              };
+            };
+            languages = {
+              Nix = {
+                language_servers = [
+                  "nil"
+                  "!nixd"
+                ];
+                formatter = {
+                  external =
+                    {
+                      command = "nixpkgs-fmt";
+                    };
+                };
+              };
+            };
+
+            lsp = {
+              rust-analyzer = {
+                binary = {
+                  path = "/run/current-system/sw/bin/rust-analyzer";
+                };
+              };
+              nil = {
+                binary = {
+                  path = "${pkgs.nil}/bin/nil";
+                };
+              };
             };
           };
-          nil = {
-            binary = {
-              path = "${pkgs.nil}/bin/nil";
-            };
-          };
-        };
       };
-    };
   };
 }
