@@ -16,7 +16,15 @@
   programs.virt-manager.enable = true;
 
   users.groups.libvirtd.members = [ "jaoleal" ];
-
+  boot = {
+    loader = {
+      grub.enable = true;
+      grub.device = "nodev";
+      grub.useOSProber = true;
+      grub.efiSupport = true;
+      efi.canTouchEfiVariables = true;
+    };
+  };
   virtualisation = {
     libvirtd.enable = true;
     spiceUSBRedirection.enable = true;

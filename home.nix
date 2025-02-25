@@ -33,22 +33,15 @@
       userEmail = "jgleal@protonmail.com";
       userName = "jaoleal";
       signing = {
-        key = "0x9AE892D482B588FA";
+        key = "0x6A9F838299371DD2";
         signByDefault = true;
       };
     };
     gpg = {
       enable = true;
-      scdaemonSettings = {
-        disable-ccid = true;
-      };
     };
     home-manager.enable = true;
     bash.enable = true;
-    bash.bashrcExtra = ''
-      	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-      	gpgconf --launch gpg-agent
-      	echo Haro '';
     chromium = {
       enable = true;
       extensions = [
@@ -77,7 +70,7 @@
             terminal = {
               dock = "left";
               copy_on_select = true;
-              font_family = "Ubuntu Nerd Font";
+              font_family = "UbuntuMono Nerd Font Mono";
             };
             current_line_highlight = "line";
             inline_completions_disabled_in = {

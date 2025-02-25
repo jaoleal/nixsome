@@ -21,6 +21,7 @@
     openssl
     clang
   ];
+  programs.steam.enable = true;
   fonts.packages = with pkgs; [ nerdfonts ];
   users.users.jaoleal = {
     isNormalUser = true;
@@ -54,15 +55,7 @@
   };
   i18n.defaultLocale = "en_US.UTF-8";
   time.hardwareClockInLocalTime = true;
-  boot = {
-    loader = {
-      grub.enable = true;
-      grub.device = "nodev";
-      grub.useOSProber = true;
-      grub.efiSupport = true;
-      efi.canTouchEfiVariables = true;
-    };
-  };
+
   system.stateVersion = "24.05"; # Did you read the comment?
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
