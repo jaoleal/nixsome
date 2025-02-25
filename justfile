@@ -1,25 +1,38 @@
 default:
     @just --list
 
-set-build-desk:
-    @just set-conf
-    sudo nixos-rebuild switch --flake /etc/nixos/#desktop
+# Set the last `backend` generation to active.
+set-backend:
+    @just _set-sysconf
+    sudo nixos-rebuild switch --flake /etc/nixos/#backend
 
-set-build-note:
-    @just set-conf
-    sudo nixos-rebuild switch --flake /etc/nixos/#notebook
+# Set the last `userland` generation to active.
+set-userland:
+    @just _set-sysconf
+    sudo nixos-rebuild switch --flake /etc/nixos/#userland
 
-set-conf:
-    #!/usr/bin/env bash
-    sudo cp /etc/nixos/hardware-configuration.nix .
-    sudo rm -rf /etc/nixos/*
-    sudo cp *.nix /etc/nixos/
-    sudo cp flake.lock /etc/nixos/
-
-prof-install:
-    nix profile install --experimental-features 'nix-command flakes'
-
+# Set the last home-manager generation to active.
 set-hman:
-    rm -rf ~/.config/home-manager/*
-    cp -r home.nix ~/.config/home-manager/
+    @just _set-homeconf
     home-manager switch
+
+check:
+    @just _set-sysconf
+    nix flake check /etc/nixos#
+
+# Allows /etc/nixos to jaoleal... Once in a life of a partition.
+allow:
+    sudo chown jaoleal /etc/nixos
+
+_set-sysconf:
+    #!/usr/bin/env bash
+    cp /etc/nixos/hardware-configuration.nix .
+    rm -rf /etc/nixos/*
+    cp *.nix /etc/nixos/
+    cp flake.lock /etc/nixos/
+
+_set-homeconf:
+    #!/usr/bin/env bash
+    rm -rf ~/.config/home-manager
+    mkdir ~/.config/home-manager
+    cp -r home.nix ~/.config/home-manager/

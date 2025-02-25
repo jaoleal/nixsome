@@ -10,19 +10,34 @@
     ports = [ 22 ];
     settings = {
       PasswordAuthentication = true;
-      AllowUsers = [ "jaoleal" "sm2024" ]; # Allows all users by default. Can be [ "user1" "user2" ]
+      AllowUsers = [ "jaoleal" "sm2024" ];
       UseDns = true;
       X11Forwarding = false;
-      PermitRootLogin = "yes"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
+      PermitRootLogin = "yes";
     };
   };
-  environment.systemPackages = with pkgs; [
-    wget
-    vim
-    just
-    yubikey-manager
-    usbutils
-  ];
+  programs.nix-ld.enable = true;
+
+  environment.systemPackages =
+    let
+      #Some packages that i need locally to do remote development
+      dev_deps = with pkgs; [
+        rustup
+        git
+        just
+        clang
+        pkg-config
+        openssl
+      ];
+    in
+    with pkgs;
+    [
+      wget
+      vim
+      yubikey-manager
+      usbutils
+    ] ++ dev_deps;
+
 
   users.users.jaoleal = {
     isNormalUser = true;
@@ -43,7 +58,7 @@
   services.pcscd.enable = true;
   services.tailscale.enable = true;
   networking.networkmanager.enable = true;
-  time.timeZone = " America/Sao_Paulo ";
+  time.timeZone = "America/Sao_Paulo";
   services.xserver.xkb = {
     layout = "us";
     variant = " ";
@@ -56,8 +71,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-  i18n.defaultLocale = "
-      en_US.UTF-8 ";
+  i18n.defaultLocale = "en_US.UTF-8";
   time.hardwareClockInLocalTime = true;
   boot.loader.systemd-boot.enable = true;
   systemd.sleep.extraConfig = ''

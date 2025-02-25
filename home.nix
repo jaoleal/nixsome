@@ -12,6 +12,7 @@
   services = {
     gpg-agent = {
       enable = true;
+      sshKeys = [ "17E5F552FCCEC23CD086C617298E5BD0BAF906BD" ];
       enableSshSupport = true;
       defaultCacheTtlSsh = 4000;
       defaultCacheTtl = 34560000;
@@ -33,7 +34,7 @@
       userEmail = "jgleal@protonmail.com";
       userName = "jaoleal";
       signing = {
-        key = "0x9AE892D482B588FA";
+        key = "0xA85033E37C1CB47E";
         signByDefault = true;
       };
     };
@@ -74,10 +75,21 @@
               dark = "Gruvbox Dark Soft";
               light = "Gruvbox Material";
             };
+            ssh_connections = [
+              {
+                host = "100.100.254.112";
+                projects = [
+                  {
+                    paths = [
+                      "~/code/floresta"
+                    ];
+                  }
+                ];
+              }
+            ];
             terminal = {
-              dock = "left";
               copy_on_select = true;
-              font_family = "Ubuntu Nerd Font";
+              font_family = "UbuntuMono Nerd Font Mono";
             };
             current_line_highlight = "line";
             inline_completions_disabled_in = {

@@ -1,36 +1,36 @@
 {
   inputs = {
     pkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
-
-  outputs = { self, pkgs, ... }:
+  outputs = { self, pkgs, vscode-server, ... }:
     let
       system = "x86_64-linux";
-      nixDevShell = import ./nixdev.nix {
-        pkgs = import pkgs {
-          system = system;
-        };
-      };
+
+      hardware = ./hardware-configuration.nix;
     in
     {
       nixosConfigurations = {
-        desktop = pkgs.lib.nixosSystem {
-          system = system;
+        userland = pkgs.lib.nixosSystem {
+
           modules = [
-            ./common.nix
-            ./desktop.nix
+            hardware
+            ./userland.nix
           ];
+          inherit system;
         };
-        notebook = pkgs.lib.nixosSystem {
-          system = system;
+        backend = pkgs.lib.nixosSystem {
           modules = [
-            ./common.nix
-            ./notebook.nix
+            hardware
+            ./backend.nix
+
+            vscode-server.nixosModules.default
+            ({ pkgs, ... }: {
+              services.vscode-server.enable = true;
+            })
           ];
+          inherit system;
         };
-      };
-      devShells = {
-        x86_64-linux = { default = nixDevShell; };
       };
     };
 
