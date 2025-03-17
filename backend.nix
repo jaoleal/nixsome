@@ -12,7 +12,7 @@
       PasswordAuthentication = true;
       AllowUsers = [ "jaoleal" ];
       UseDns = true;
-      X11Forwarding = false;
+      X11Forwarding = true;
       PermitRootLogin = "yes";
     };
   };
@@ -51,6 +51,7 @@
         clang
         pkg-config
         openssl
+
       ];
     in
     with pkgs;
@@ -59,6 +60,7 @@
       vim
       yubikey-manager
       usbutils
+      xorg.xauth
     ] ++ dev_deps;
 
 
