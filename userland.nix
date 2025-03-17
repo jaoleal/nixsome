@@ -44,15 +44,6 @@
     layout = "us";
     variant = "";
   };
-  services.create_ap = {
-    enable = true;
-    settings = {
-      INTERNET_IFACE = "enp3s0f3u1";
-      WIFI_IFACE = "wlp1s0";
-      SSID = "Wifi Tchola";
-      PASSPHRASE = "Tchol@Vinteum000";
-    };
-  };
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {

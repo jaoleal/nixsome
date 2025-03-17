@@ -10,12 +10,35 @@
     ports = [ 22 ];
     settings = {
       PasswordAuthentication = true;
-      AllowUsers = [ "jaoleal" "sm2024" ];
+      AllowUsers = [ "jaoleal" ];
       UseDns = true;
       X11Forwarding = false;
       PermitRootLogin = "yes";
     };
   };
+  systemd.user.services =
+    {
+      florestad-master = {
+        enable = true;
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        description = "Florestad service";
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = ''/home/jaoleal/floresta/target/release/florestad'';
+        };
+      };
+      utreexod = {
+        enable = true;
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        description = "Florestad service";
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = ''/home/jaoleal/utreexod/utreexod --utreexoproofindex --prune=0 -b  /home/jaoleal/.utreexod/data'';
+        };
+      };
+    };
   programs.nix-ld.enable = true;
 
   environment.systemPackages =
@@ -41,19 +64,11 @@
 
   users.users.jaoleal = {
     isNormalUser = true;
+    linger = true;
     description = "Joao Leal";
     extraGroups = [ "networkmanager" "wheel" ];
   };
 
-  users.users.sm2024 =
-    {
-      isNormalUser = true;
-      description = "Server User";
-      extraGroups = [
-        "networkmanager"
-        "wheel"
-      ];
-    };
   nixpkgs.config.allowUnfree = true;
   services.pcscd.enable = true;
   services.tailscale.enable = true;
