@@ -16,6 +16,12 @@
       X11UseLocalhost = "no";
     };
   };
+  networking.firewall.allowedTCPPorts = [ 6010 ];
+
+  # Fica frio ai. Deixa eu dar hot reload no meu sistema em paz.
+  systemd.network.wait-online.enable = false;
+  boot.initrd.systemd.network.wait-online.enable = false;
+
   systemd.user.services =
     {
       florestad-master = {
