@@ -13,7 +13,7 @@
       AllowUsers = [ "jaoleal" ];
       UseDns = true;
       X11Forwarding = true;
-      PermitRootLogin = "yes";
+      X11UseLocalhost = "no";
     };
   };
   systemd.user.services =
@@ -39,20 +39,26 @@
         };
       };
     };
-  programs.nix-ld.enable = true;
 
+  programs =
+    {
+      nix-ld.enable = true;
+      ssh.forwardX11 = true;
+
+    };
   environment.systemPackages =
     let
       #Some packages that i need locally to do remote development
-      dev_deps = with pkgs; [
-        rustup
-        git
-        just
-        clang
-        pkg-config
-        openssl
+      dev_deps = with pkgs;
+        [
+          rustup
+          git
+          just
+          clang
+          pkg-config
+          openssl
 
-      ];
+        ];
     in
     with pkgs;
     [
