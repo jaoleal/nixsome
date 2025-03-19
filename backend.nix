@@ -16,6 +16,11 @@
       X11UseLocalhost = "no";
     };
   };
+  fileSystems."/mnt/bigd" = {
+    device = "/dev/sda";
+    fsType = "ext4";
+    options = [ "defaults" "noatime" ];
+  };
   networking.firewall.allowedTCPPorts = [ 6010 ];
 
   # Fica frio ai. Deixa eu dar hot reload no meu sistema em paz.
