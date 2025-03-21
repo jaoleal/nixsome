@@ -1,6 +1,5 @@
 # This is the commom configs between desktop and notebook
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     wget
     vim
@@ -11,7 +10,6 @@
     usbutils
     nixpkgs-fmt
     nix
-    nixpkgs-fmt
     niv
     curl
     direnv
@@ -22,6 +20,7 @@
     vscode
     openssl
     clang
+    moonlight-qt
   ];
   programs.steam.enable = true;
   fonts.packages = with pkgs; [ nerdfonts ];
@@ -59,9 +58,5 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   hardware.graphics.enable = true;
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-    };
-  };
+  boot = { loader = { systemd-boot.enable = true; }; };
 }
