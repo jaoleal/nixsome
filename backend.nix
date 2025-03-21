@@ -32,6 +32,15 @@
 
   };
   services = {
+    create_ap = {
+      enable = true;
+      settings = {
+        INTERNET_IFACE = "enp6s0";
+        WIFI_IFACE = "wlp5s0";
+        SSID = "Wifi Tchola";
+        PASSPHRASE = "12345678";
+      };
+    };
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -66,18 +75,20 @@
     nix-ld.enable = true;
     ssh.forwardX11 = true;
   };
-  environment.systemPackages = let
-    #Some packages that i need locally to do remote development
-    dev_deps = with pkgs; [
-      rustup
-      git
-      just
-      clang
-      pkg-config
-      openssl
+  environment.systemPackages =
+    let
+      #Some packages that i need locally to do remote development
+      dev_deps = with pkgs; [
+        rustup
+        git
+        just
+        clang
+        pkg-config
+        openssl
 
-    ];
-  in with pkgs; [ wget vim yubikey-manager usbutils xorg.xauth ] ++ dev_deps;
+      ];
+    in
+    with pkgs; [ wget vim yubikey-manager usbutils xorg.xauth ] ++ dev_deps;
   hardware.graphics.enable = true;
 
   users.users.jaoleal = {
