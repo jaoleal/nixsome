@@ -115,6 +115,21 @@
     network.wait-online.enable = false;
   };
 
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 47984 47989 47990 48010 ];
+    allowedUDPPortRanges = [
+      {
+        from = 47998;
+        to = 48000;
+      }
+      {
+        from = 8000;
+        to = 8010;
+      }
+    ];
+  };
+
   system.stateVersion = " 24.05 "; # Did you read the comment?
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
