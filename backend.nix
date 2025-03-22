@@ -22,25 +22,33 @@
       enable = true;
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      description = "Florestad service";
+      description = "Utreexod Service";
       serviceConfig = {
         Type = "simple";
         ExecStart =
-          "/home/jaoleal/utreexod/utreexod --utreexoproofindex --prune=0 -b  /mnt/bigd/.utreexod/data";
+          "/home/jaoleal/utreexod/utreexod --utreexoproofindex --prune=0 -b /mnt/bigd/.utreexod/data";
       };
     };
-
+  };
+  boot.kernelPackages = pkgs.linuxPackages;
+  services.getty.autologinUser = "jaoleal";
+  environment = {
+    loginShellInit = ''
+      [[ "$(tty)" = "/dev/tty1" ]] && ./gs.sh
+    '';
+  };
+  programs = {
+    gamescope = {
+      enable = true;
+      capSysNice = true;
+    };
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+    };
   };
   services = {
-    create_ap = {
-      enable = true;
-      settings = {
-        INTERNET_IFACE = "enp6s0";
-        WIFI_IFACE = "wlp5s0";
-        SSID = "Wifi Tchola";
-        PASSPHRASE = "12345678";
-      };
-    };
+
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -53,11 +61,6 @@
       capSysAdmin = true;
       openFirewall = true;
     };
-    xserver = {
-      enable = true;
-      desktopManager.gnome.enable = true;
-      displayManager.gdm.enable = true;
-    };
     openssh = {
       enable = true;
       startWhenNeeded = true;
@@ -67,8 +70,12 @@
         AllowUsers = [ "jaoleal" ];
         UseDns = true;
         X11Forwarding = true;
-        X11UseLocalhost = "no";
       };
+    };
+    xserver = {
+      enable = true;
+      desktopManager.gnome.enable = true;
+      displayManager.gdm.enable = true;
     };
   };
   programs = {
@@ -85,10 +92,9 @@
         clang
         pkg-config
         openssl
-
       ];
     in
-    with pkgs; [ wget vim yubikey-manager usbutils xorg.xauth ] ++ dev_deps;
+    with pkgs; [ ryujinx mangohud wget vim yubikey-manager usbutils ] ++ dev_deps;
   hardware.graphics.enable = true;
 
   users.users.jaoleal = {
@@ -101,12 +107,12 @@
   nixpkgs.config.allowUnfree = true;
   services.pcscd.enable = true;
   services.tailscale.enable = true;
-  networking.networkmanager.enable = true;
   time.timeZone = "America/Sao_Paulo";
   services.xserver.xkb = {
     layout = "us";
     variant = " ";
   };
+
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   i18n.defaultLocale = "en_US.UTF-8";
@@ -122,13 +128,20 @@
       AllowHybridSleep=no
       AllowSuspendThenHibernate=no
     '';
-
+    targets.sleep.enable = false;
+    targets.suspend.enable = false;
+    targets.hibernate.enable = false;
+    targets.hybrid-sleep.enable = false;
     network.wait-online.enable = false;
   };
 
+  networking = { hostName = "sv"; networkmanager.enable = true; };
+
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 47984 47989 47990 48010 ];
+
+
+    allowedTCPPorts = [ 22 47984 3389 47989 47990 48010 ];
     allowedUDPPortRanges = [
       {
         from = 47998;
@@ -141,7 +154,7 @@
     ];
   };
 
-  system.stateVersion = " 24.05 "; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 }
