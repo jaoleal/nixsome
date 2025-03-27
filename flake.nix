@@ -9,7 +9,7 @@
       # May god permit that i have some ARM userland but not now.
       pkgs = nixpkgs.legacyPackages.${system};
 
-      hardware = ./hardware-configuration.nix;
+      hardware = import ./src/hardware-configuration.nix;
     in
     {
       devShells.${system} = {
@@ -39,15 +39,14 @@
         userland = nixpkgs.lib.nixosSystem {
           modules = [
             hardware
-            ./userland.nix
+            ./src/userland.nix
           ];
           inherit system;
         };
         backend = nixpkgs.lib.nixosSystem {
           modules = [
             hardware
-            ./backend.nix
-
+            ./src/backend.nix
             vscode-server.nixosModules.default
             ({ pkgs, ... }: {
               services.vscode-server.enable = true;
@@ -58,5 +57,5 @@
       };
     };
 
-  description = "Remember the DISSSSS ?";
+  description = "Remember the DISSSSS ";
 }

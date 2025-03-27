@@ -24,11 +24,17 @@ check:
 allow:
     sudo chown jaoleal /etc/nixos
 
+gen-hardware-config:
+    nixos-generate-config --dir .
+    mv ./hardware-configuration.nix ./src/.
+    rm -rf ./configuration.nix
+
 _set-sysconf:
     #!/usr/bin/env bash
-    cp /etc/nixos/hardware-configuration.nix .
+    cp /etc/nixos/src/hardware-configuration.nix ./src/.
     rm -rf /etc/nixos/*
-    cp *.nix /etc/nixos/
+    cp -r ./src /etc/nixos/
+    cp flake.nix /etc/nixos/
     cp flake.lock /etc/nixos/
 
 _set-homeconf:

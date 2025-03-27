@@ -9,11 +9,9 @@
     just
     usbutils
     nixpkgs-fmt
-    nix
     niv
     curl
     direnv
-    nixd
     nixd
     rustup
     pkg-config
@@ -21,7 +19,9 @@
     openssl
     clang
     moonlight-qt
+    vial
   ];
+  services.udev.packages = with pkgs; [ vial via ];
   programs.steam.enable = true;
   fonts.packages = with pkgs; [ nerdfonts ];
   users.users.jaoleal = {
