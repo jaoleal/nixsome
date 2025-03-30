@@ -5,7 +5,7 @@
     username = "jaoleal";
     homeDirectory = "/home/jaoleal";
     stateVersion = "24.05"; # Dont change.
-    packages = with pkgs; [ git zed-editor gnupg nixpkgs-fmt nil ];
+    packages = with pkgs; [ git zed-editor gnupg nixfmt-rfc-style nil ];
     file = { };
     sessionVariables = { };
   };
@@ -44,7 +44,6 @@
         disable-ccid = true;
       };
     };
-    home-manager.enable = true;
     bash.enable = true;
     bash.bashrcExtra = ''
       	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
@@ -75,18 +74,6 @@
               dark = "Gruvbox Dark Soft";
               light = "Gruvbox Material";
             };
-            ssh_connections = [
-              {
-                host = "100.100.254.112";
-                projects = [
-                  {
-                    paths = [
-                      "~/code/floresta"
-                    ];
-                  }
-                ];
-              }
-            ];
             terminal = {
               copy_on_select = true;
               font_family = "UbuntuMono Nerd Font Mono";
@@ -118,12 +105,11 @@
                 formatter = {
                   external =
                     {
-                      command = "nixpkgs-fmt";
+                      command = "nixfmt";
                     };
                 };
               };
             };
-
             lsp = {
               rust-analyzer = {
                 binary = {
