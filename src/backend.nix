@@ -1,5 +1,8 @@
-{ pkgs, ... }: {
- imports =  [ ../hardware-config/backend-hardware-configuration.nix ];
+{ pkgs, ... }:
+{
+  imports = [
+    ../hardware-config/backend-hardware-configuration.nix
+  ];
 
   systemd.user.services = {
     florestad-master = {
@@ -19,13 +22,16 @@
       description = "Utreexod Service";
       serviceConfig = {
         Type = "simple";
-        ExecStart =
-         ''
-	/home/jaoleal/utreexod/utreexod --utreexoproofindex --prune=0 --datadir="/mnt/bigd/.utreexod/data"
-	'';
+        ExecStart = ''
+          	/home/jaoleal/utreexod/utreexod --utreexoproofindex --prune=0 --datadir="/mnt/bigd/.utreexod/data"
+          	'';
       };
     };
   };
+  users.groups.libvirtd.members = [ "jaoleal" ];
+
+  virtualisation.libvirtd.enable = true;
+
   boot.kernelPackages = pkgs.linuxPackages;
   programs = {
     gamescope = {
@@ -64,7 +70,6 @@
     xserver = {
       enable = true;
       desktopManager.gnome.enable = true;
-      displayManager.gdm.enable = true;
     };
   };
   programs = {
@@ -83,14 +88,27 @@
         openssl
       ];
     in
-    with pkgs; [ ryujinx mangohud wget vim yubikey-manager usbutils ] ++ dev_deps;
-  
-hardware.graphics.enable = true;
+    with pkgs;
+    [
+      ryujinx
+      mangohud
+      wget
+      vim
+      yubikey-manager
+      usbutils
+    ]
+    ++ dev_deps;
+
+  hardware.graphics.enable = true;
+
   users.users.jaoleal = {
     isNormalUser = true;
     linger = true;
     description = "Joao Leal";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
   };
   nixpkgs.config.allowUnfree = true;
   services.pcscd.enable = true;
@@ -123,14 +141,21 @@ hardware.graphics.enable = true;
     network.wait-online.enable = false;
   };
 
-  networking = { 
-	hostName = "sv"; 
-	networkmanager.enable = true; 
-	};
+  networking = {
+    hostName = "sv";
+    networkmanager.enable = true;
+  };
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 47984 3389 47989 47990 48010 ];
+    allowedTCPPorts = [
+      22
+      47984
+      3389
+      47989
+      47990
+      48010
+    ];
     allowedUDPPortRanges = [
       {
         from = 47998;
@@ -141,9 +166,37 @@ hardware.graphics.enable = true;
         to = 8010;
       }
     ];
+
+  };
+  systemd.network.enable = true;
+
+  systemd.network.networks."10-lan" = {
+    matchConfig.Name = [
+      "enp6s0"
+      "vm-services"
+    ];
+    networkConfig = {
+      Bridge = "br0";
+    };
+  };
+  systemd.network.netdevs."br0" = {
+    netdevConfig = {
+      Name = "br0";
+      Kind = "bridge";
+    };
+  };
+
+  systemd.network.networks."10-lan-bridge" = {
+    matchConfig.Name = "br0";
+    networkConfig = {
+      DHCP = true;
+    };
   };
 
   system.stateVersion = "24.05"; # Did you read the comment?
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 }
