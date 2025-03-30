@@ -3,27 +3,18 @@
   environment.systemPackages = with pkgs; [
     wget
     vim
-    proton-vpn-local-agent
-    protonvpn-gui
-    protonmail-desktop
-    just
-    usbutils
     nixpkgs-fmt
     niv
-    curl
-    direnv
     nixd
     rustup
     pkg-config
     vscode
     openssl
     clang
-    moonlight-qt
     vial
   ];
   services.udev.packages = with pkgs; [ vial via ];
   programs.steam.enable = true;
-  fonts.packages = with pkgs; [ nerdfonts ];
   users.users.jaoleal = {
     isNormalUser = true;
     description = "Joao Leal";
@@ -33,7 +24,6 @@
   services.xserver = {
     enable = true;
     desktopManager.gnome.enable = true;
-    displayManager.gdm.enable = true;
   };
   nixpkgs.config.allowUnfree = true;
   services.flatpak.enable = true;
