@@ -25,16 +25,23 @@
   programs = {
     nix-ld.enable = true;
   };
-  environment.systemPackages =
+  environment.systemPackages = with pkgs; [
+    moonlight-qt
+    proton-vpn-local-agent
+    protonvpn-gui
+    protonmail-desktop
+    git
+    wget
+    vim
+    usbutils
+    just
+    usbutils
+    curl
+    direnv
 
-    with pkgs; [
-      git
-      wget
-      vim
-      usbutils
-    ];
+  ];
   hardware.graphics.enable = true;
-
+  fonts.packages = with pkgs; [ nerdfonts ];
   users.users.jaoleal = {
     isNormalUser = true;
     linger = true;
@@ -42,7 +49,12 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "libvirtd"
     ];
+  };
+  services.xserver = {
+    enable = true;
+    desktopManager.gnome.enable = true;
   };
 
   nixpkgs.config.allowUnfree = true;
