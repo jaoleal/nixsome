@@ -1,52 +1,229 @@
 # This is the commom configs between desktop and notebook
-{ pkgs, ... }: {
-  environment.systemPackages = with pkgs; [
-    wget
-    vim
-    nixpkgs-fmt
-    niv
-    nixd
-    rustup
-    pkg-config
-    vscode
-    openssl
-    clang
-    vial
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz";
+in
+{
+  imports = [
+    (import "${home-manager}/nixos")
   ];
-  services.udev.packages = with pkgs; [ vial via ];
-  programs.steam.enable = true;
+
   users.users.jaoleal = {
     isNormalUser = true;
     description = "Joao Leal";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "libvirtd"
+    ];
   };
-  services.tailscale.enable = true;
-  services.xserver = {
-    enable = true;
-    desktopManager.gnome.enable = true;
-  };
-  nixpkgs.config.allowUnfree = true;
-  services.flatpak.enable = true;
-  networking.networkmanager.enable = true;
-  time.timeZone = "America/Sao_Paulo";
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-  i18n.defaultLocale = "en_US.UTF-8";
 
-  system.stateVersion = "24.11"; # Did you read the comment?
+  home = {
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+    username = "jaoleal";
+
+    homeDirectory = "/home/jaoleal";
+
+    stateVersion = "24.05"; # Dont change
+
+    packages = with pkgs; [
+      wget
+      vim
+      nixd
+      rustup
+      pkg-config
+      openssl
+      clang
+      vial
+      git
+      zed-editor
+      gnupg
+      nixfmt-rfc-style
+      nil
+    ];
+
+    file = { };
+
+    sessionVariables = { };
+
+  };
+
+  programs = {
+
+    steam.enable = true;
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    git = {
+      enable = true;
+      userEmail = "jgleal@protonmail.com";
+      userName = "jaoleal";
+      signing = {
+        key = "0xA85033E37C1CB47E";
+        signByDefault = true;
+      };
+    };
+
+    gpg = {
+      enable = true;
+      scdaemonSettings = {
+        disable-ccid = true;
+      };
+    };
+
+    bash.enable = true;
+    bash.bashrcExtra = ''
+      	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+      	gpgconf --launch gpg-agent
+      	echo Haro '';
+    chromium = {
+      enable = true;
+      extensions = [
+        { id = "ddkjiahejlhfcafbddmgiahcphecmpfh"; } # Ublock
+        { id = "ghmbeldphafepmbegfdlkpapadhbakde"; } # Proton Pass
+        { id = "mnjggcdmjocbbbhaepdhchncahnbgone"; } # Sponsor Block
+        { id = "ncmflpbbagcnakkolfpcpogheckolnad"; } # Nostr Profiles
+      ];
+    };
+    zed-editor = {
+      enable = true;
+      package = pkgs.zed-editor;
+      userSettings = {
+        buffer_font_family = "Source Code Pro";
+        restore_on_startup = "last_workspace";
+        autoscroll_on_clicks = true;
+        load_direnv = "direct";
+        base_keymap = "VSCode";
+        theme = {
+          mode = "system";
+          dark = "Gruvbox Dark Soft";
+          light = "Gruvbox Material";
+        };
+        terminal = {
+          copy_on_select = true;
+          font_family = "UbuntuMono Nerd Font Mono";
+        };
+        current_line_highlight = "line";
+        inline_completions_disabled_in = {
+          disabled_in = [
+            "comment"
+            "string"
+          ];
+        };
+        autosave = {
+          after_delay = {
+            milliseconds = 1000;
+          };
+        };
+
+        scrollbar = {
+          show = "auto";
+          cursors = false;
+          axes = {
+            horizontal = true;
+            vertical = true;
+          };
+        };
+        languages = {
+          Nix = {
+            language_servers = [
+              "nil"
+              "!nixd"
+            ];
+            formatter = {
+              external = {
+                command = "nixfmt";
+              };
+            };
+          };
+        };
+        lsp = {
+          rust-analyzer = {
+            binary = {
+              path = "/run/current-system/sw/bin/rust-analyzer";
+            };
+          };
+          nil = {
+            binary = {
+              path = "${pkgs.nil}/bin/nil";
+            };
+          };
+        };
+      };
+    };
+  };
+
+  fonts.packages = with pkgs; [ nerdfonts ];
 
   hardware.graphics.enable = true;
-  boot = { loader = { systemd-boot.enable = true; }; };
+
+  nixpkgs.config.allowUnfree = true;
+
+  time.timeZone = "America/Sao_Paulo";
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+  system.stateVersion = "24.11"; # Did you read the comment?
+
+  services = {
+
+    qemuGuest.enable = true;
+    
+    spice-vdagentd.enable = true;
+
+    hardware.pulseaudio.enable = false;
+
+    tailscale.enable = true;
+
+    security.rtkit.enable = true;
+
+    networking.networkmanager.enable = true;
+
+    xserver = {
+
+      enable = true;
+      desktopManager.gnome.enable = true;
+
+      xkb = {
+        layout = "us";
+        variant = "";
+      };
+    };
+
+    i18n.defaultLocale = "en_US.UTF-8";
+
+    flatpak.enable = true;
+
+    gpg-agent = {
+      enable = true;
+      sshKeys = [ "17E5F552FCCEC23CD086C617298E5BD0BAF906BD" ];
+      enableSshSupport = true;
+      defaultCacheTtlSsh = 4000;
+      defaultCacheTtl = 34560000;
+      maxCacheTtl = 34560000;
+      enableBashIntegration = true;
+      enableScDaemon = true;
+      grabKeyboardAndMouse = true;
+      pinentryPackage = pkgs.pinentry-gnome3;
+    };
+
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+  };
+
+  boot.loader.systemd-boot.enable = true;
 }

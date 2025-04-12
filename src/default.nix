@@ -1,8 +1,9 @@
-{}: {
+{ }:
+{
   imports = [
     ./backend.nix
-    ./home.nix
     ./userland.nix
+    ./services.nix
     ./hardware-configuration.nix
   ];
 }

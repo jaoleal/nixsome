@@ -5,8 +5,9 @@
   ];
 
   users.groups.libvirtd.members = [ "jaoleal" ];
-
   virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages;
   services = {
@@ -25,6 +26,7 @@
   programs = {
     nix-ld.enable = true;
   };
+
   environment.systemPackages = with pkgs; [
     moonlight-qt
     proton-vpn-local-agent
@@ -38,7 +40,6 @@
     usbutils
     curl
     direnv
-
   ];
   hardware.graphics.enable = true;
   fonts.packages = with pkgs; [ nerdfonts ];
@@ -65,12 +66,16 @@
     variant = " ";
   };
   hardware.pulseaudio.enable = false;
+
   security.rtkit.enable = true;
+
   i18n.defaultLocale = "en_US.UTF-8";
+
   boot = {
     initrd.systemd.network.wait-online.enable = false;
     loader.systemd-boot.enable = true;
   };
+
   systemd = {
     sleep.extraConfig = ''
       AllowSuspend=no
@@ -139,9 +144,9 @@
   system.stateVersion = "24.05"; # Did you read the comment?
 
   microvm.autostart = [
-    "vm-userland"
     "vm-services"
   ];
+
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
