@@ -2,27 +2,46 @@
   description = "Remember the DISSSSS ";
   outputs =
     { self, ... }@inputs:
+    let
+      system = "x86_64-linux";
+      pkgs = import inputs.nixpkgs { inherit system; };
+    in
     {
       nixosConfigurations = {
         userland = inputs.nixpkgs.lib.nixosSystem {
+          inherit system;
           modules = [
             ./src/hardware-configuration.nix
             ./src/userland.nix
           ];
-          system = "x86_64-linux";
         };
         backend = inputs.nixpkgs.lib.nixosSystem {
+          inherit system;
           modules = [
             ./src/backend.nix
             inputs.microvm.nixosModules.host
           ];
         };
         vm-services = inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          inherit system;
           modules = [
             ./vms/services.nix
             inputs.microvm.nixosModules.microvm
           ];
+        };
+      };
+      devShells.${system} = {
+        # Default devshell for nix development.
+        default = pkgs.mkShell {
+          nativeBuildInputs = with pkgs; [
+            nixfmt-rfc-style
+            nil
+            git
+          ];
+          shellHook = ''
+            echo "Haro"
+          '';
+
         };
       };
     };
