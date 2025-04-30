@@ -2,28 +2,42 @@
   description = "Remember the DISSSSS ";
   outputs =
     { self, ... }@inputs:
+    let
+      src = import ./src { };
+
+      system = "x86_64-linux";
+      stateVersion = "24.11";
+    in
     {
       nixosConfigurations = {
-        userland = inputs.nixpkgs.lib.nixosSystem {
-          modules = [
-            ./src/hardware-configuration.nix
-            ./src/userland.nix
-          ];
-          system = "x86_64-linux";
-        };
-        backend = inputs.nixpkgs.lib.nixosSystem {
-          modules = [
-            ./src/backend.nix
+        backend = src.buildNixos {
+          inherit inputs system stateVersion;
+
+          hostname = "sv";
+          username = "jaoleal";
+          userland = false;
+          extraModules = [
+            inputs.stylix.nixosModules.stylix
+
             inputs.microvm.nixosModules.host
           ];
         };
-        vm-services = inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./src/services.nix
-            inputs.microvm.nixosModules.microvm
-          ];
-        };
+        #userland = src.buildNixos {
+        #         inherit inputs system stateVersion;
+
+        #  hostname = "laptop";
+        #  username = "jaoleal";
+        #  userland = true;
+        #  extraModules = [ ];
+        #};
+
+        #vm-services = inputs.nixpkgs.lib.nixosSystem {
+        #  system = "x86_64-linux";
+        #  modules = [
+        #    ./src/services.nix
+        #    inputs.microvm.nixosModules
+        #  ];
+        #};
       };
     };
 
@@ -43,6 +57,13 @@
     };
     utreexod-flake = {
       url = "github:jaoleal/utreexod-flake";
+    };
+    stylix = {
+      url = "github:danth/stylix";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     floresta = {
       url = "git+https://github.com/jaoleal/Floresta?ref=more-flake-checks";

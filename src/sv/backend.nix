@@ -1,23 +1,21 @@
-{ pkgs, ... }:
 {
-  imports = [
-    ../hardware-config/backend-hardware-configuration.nix
-  ];
+  pkgs,
+  username,
+  hostname,
+  ...
+}:
+{
 
-  users.groups.libvirtd.members = [ "jaoleal" ];
-  virtualisation.libvirtd.enable = true;
-  programs.virt-manager.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
+  users.groups.libvirtd.members = [ "${username}" ];
 
-  boot.kernelPackages = pkgs.linuxPackages;
   services = {
     openssh = {
-      enable = true;
+
       startWhenNeeded = true;
       ports = [ 22 ];
       settings = {
         PasswordAuthentication = true;
-        AllowUsers = [ "jaoleal" ];
+        AllowUsers = [ "${username}" ];
         UseDns = true;
         X11Forwarding = true;
       };
@@ -25,6 +23,13 @@
   };
   programs = {
     nix-ld.enable = true;
+
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+      localNetworkGameTransfers.openFirewall = true;
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -43,7 +48,7 @@
   ];
   hardware.graphics.enable = true;
   fonts.packages = with pkgs; [ nerdfonts ];
-  users.users.jaoleal = {
+  users.users.${username} = {
     isNormalUser = true;
     linger = true;
     description = "Joao Leal";
@@ -54,8 +59,8 @@
     ];
   };
   services.xserver = {
+    videoDrivers = [ "amdgpu" ];
     enable = true;
-    desktopManager.gnome.enable = true;
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -70,11 +75,6 @@
   security.rtkit.enable = true;
 
   i18n.defaultLocale = "en_US.UTF-8";
-
-  boot = {
-    initrd.systemd.network.wait-online.enable = false;
-    loader.systemd-boot.enable = true;
-  };
 
   systemd = {
     sleep.extraConfig = ''
@@ -91,31 +91,29 @@
   };
 
   networking = {
-    hostName = "sv";
-    networkmanager.enable = true;
-  };
+    hostName = "${hostname}";
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        22
+        47984
+        3389
+        47989
+        47990
+        48010
+      ];
+      allowedUDPPortRanges = [
+        {
+          from = 47998;
+          to = 48000;
+        }
+        {
+          from = 8000;
+          to = 8010;
+        }
+      ];
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [
-      22
-      47984
-      3389
-      47989
-      47990
-      48010
-    ];
-    allowedUDPPortRanges = [
-      {
-        from = 47998;
-        to = 48000;
-      }
-      {
-        from = 8000;
-        to = 8010;
-      }
-    ];
-
+    };
   };
   systemd.network.enable = true;
   systemd.network.networks."10-lan" = {
@@ -141,8 +139,6 @@
     };
   };
 
-  system.stateVersion = "24.05"; # Did you read the comment?
-
   microvm.autostart = [
     "vm-services"
   ];
@@ -151,4 +147,16 @@
     "nix-command"
     "flakes"
   ];
+
+  boot = {
+
+    initrd.systemd.network.wait-online.enable = false;
+
+    loader.systemd-boot.enable = true;
+
+    kernelPackages = pkgs.linuxPackages;
+
+    initrd.kernelModules = [ "amdgpu" ];
+
+  };
 }

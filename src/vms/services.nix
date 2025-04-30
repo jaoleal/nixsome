@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   # It is highly recommended to share the host's nix-store
   # with the VMs to prevent building huge images.
@@ -24,7 +24,7 @@
   };
   services = {
     openssh = {
-      enable = true;
+
       startWhenNeeded = true;
       ports = [ 22 ];
       settings = {

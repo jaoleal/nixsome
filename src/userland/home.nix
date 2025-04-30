@@ -1,30 +1,7 @@
-# This is the commom configs between desktop and notebook
+{ config, pkgs, ... }:
 {
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz";
-in
-{
-  imports = [
-    (import "${home-manager}/nixos")
-  ];
-
-  users.users.jaoleal = {
-    isNormalUser = true;
-    description = "Joao Leal";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "libvirtd"
-    ];
-  };
 
   home = {
-
     username = "jaoleal";
 
     homeDirectory = "/home/jaoleal";
@@ -53,14 +30,25 @@ in
 
   };
 
-  programs = {
+  xsession = {
+    enable = true;
+    windowManager = {
+      command = "…";
+    };
+  };
 
-    steam.enable = true;
+  programs = {
 
     direnv = {
       enable = true;
+
       nix-direnv.enable = true;
+
     };
+
+    waybar.enable = true;
+
+    alacritty.enable = true;
 
     git = {
       enable = true;
@@ -72,6 +60,8 @@ in
       };
     };
 
+    home-manager.enable = true;
+
     gpg = {
       enable = true;
       scdaemonSettings = {
@@ -79,11 +69,18 @@ in
       };
     };
 
-    bash.enable = true;
-    bash.bashrcExtra = ''
-      	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-      	gpgconf --launch gpg-agent
-      	echo Haro '';
+    bash = {
+      enable = true;
+      bashrcExtra = ''
+        	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+        	gpgconf --launch gpg-agent
+         # Start Niri if we're on tty1
+         if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+           exec niri
+         fi
+      '';
+
+    };
     chromium = {
       enable = true;
       extensions = [
@@ -148,7 +145,7 @@ in
         lsp = {
           rust-analyzer = {
             binary = {
-              path = "/run/current-system/sw/bin/rust-analyzer";
+              path = "${pkgs.rustup}/bin/rust-analyzer";
             };
           };
           nil = {
@@ -160,70 +157,4 @@ in
       };
     };
   };
-
-  fonts.packages = with pkgs; [ nerdfonts ];
-
-  hardware.graphics.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
-
-  time.timeZone = "America/Sao_Paulo";
-
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  system.stateVersion = "24.11"; # Did you read the comment?
-
-  services = {
-
-    qemuGuest.enable = true;
-    
-    spice-vdagentd.enable = true;
-
-    hardware.pulseaudio.enable = false;
-
-    tailscale.enable = true;
-
-    security.rtkit.enable = true;
-
-    networking.networkmanager.enable = true;
-
-    xserver = {
-
-      enable = true;
-      desktopManager.gnome.enable = true;
-
-      xkb = {
-        layout = "us";
-        variant = "";
-      };
-    };
-
-    i18n.defaultLocale = "en_US.UTF-8";
-
-    flatpak.enable = true;
-
-    gpg-agent = {
-      enable = true;
-      sshKeys = [ "17E5F552FCCEC23CD086C617298E5BD0BAF906BD" ];
-      enableSshSupport = true;
-      defaultCacheTtlSsh = 4000;
-      defaultCacheTtl = 34560000;
-      maxCacheTtl = 34560000;
-      enableBashIntegration = true;
-      enableScDaemon = true;
-      grabKeyboardAndMouse = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
-    };
-
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
-  };
-
-  boot.loader.systemd-boot.enable = true;
 }
