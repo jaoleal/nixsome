@@ -13,7 +13,7 @@
         backend = src.buildNixos {
           inherit inputs system stateVersion;
 
-          hostname = "sv";
+          hostname = "backend";
           username = "jaoleal";
           userland = false;
           extraModules = [
@@ -22,14 +22,18 @@
             inputs.microvm.nixosModules.host
           ];
         };
-        #userland = src.buildNixos {
-        #         inherit inputs system stateVersion;
+        userland = src.buildNixos {
+          inherit inputs system stateVersion;
 
-        #  hostname = "laptop";
-        #  username = "jaoleal";
-        #  userland = true;
-        #  extraModules = [ ];
-        #};
+          hostname = "userland";
+          username = "jaoleal";
+          userland = true;
+          extraModules = [
+            inputs.stylix.nixosModules.stylix
+            inputs.niri.nixosModules.niri
+            inputs.microvm.nixosModules.host
+          ];
+        };
 
         #vm-services = inputs.nixpkgs.lib.nixosSystem {
         #  system = "x86_64-linux";

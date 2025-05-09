@@ -8,6 +8,7 @@
   users.users.${username} = {
     isNormalUser = true;
     description = "Joao Leal";
+    initialPassword = "123";
     extraGroups = [
       "networkmanager"
       "wheel"

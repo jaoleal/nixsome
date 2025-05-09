@@ -5,22 +5,35 @@
   ...
 }:
 {
-
-  users.groups.libvirtd.members = [ "${username}" ];
+  users = {
+    users.${username} = {
+      isNormalUser = true;
+      linger = true;
+      name = username;
+      description = "${username}";
+      initialPassword = "cadu";
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+        "libvirtd"
+      ];
+    };
+    mutableUsers = true;
+    groups.libvirtd.members = [ "${username}" ];
+  };
 
   services = {
     openssh = {
-
-      startWhenNeeded = true;
+      enable = true;
       ports = [ 22 ];
       settings = {
         PasswordAuthentication = true;
-        AllowUsers = [ "${username}" ];
         UseDns = true;
         X11Forwarding = true;
       };
     };
   };
+
   programs = {
     nix-ld.enable = true;
 
@@ -37,6 +50,8 @@
     proton-vpn-local-agent
     protonvpn-gui
     protonmail-desktop
+    signal-desktop
+    heroic
     git
     wget
     vim
@@ -48,15 +63,34 @@
   ];
   hardware.graphics.enable = true;
   fonts.packages = with pkgs; [ nerdfonts ];
-  users.users.${username} = {
-    isNormalUser = true;
-    linger = true;
-    description = "Joao Leal";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "libvirtd"
-    ];
+  services.tailscale.enable = true;
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = true;
+    openFirewall = true;
+    #applications = {
+    #  env = {
+    #    PATH = "$(PATH):$(HOME)/.local/bin";
+    #  };
+    #  apps = [
+    #    {
+    #      name = "steam";
+    #      prep-cmd = [
+    #        {
+    #            do = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --mode $(SUNSHINE_CLIENT_WIDTH)x$(SUNSHINE_CLIENT_HEIGHT) --rate $(SUNSHINE_CLIENT_FPS)";
+    #            undo = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --mode 2560x1440 --rate 120";
+    #          }
+    #        ];
+    #        exclude-global-prep-cmd = "false";
+    #        auto-detach = "true";
+    #        detached-commands = [
+    #          "setsid steam steam://open/bigpicture"
+    #        ];
+    #      }
+    #    ];
+    #  };
+
   };
   services.xserver = {
     videoDrivers = [ "amdgpu" ];
@@ -64,7 +98,7 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-  services.tailscale.enable = true;
+
   time.timeZone = "America/Sao_Paulo";
   services.xserver.xkb = {
     layout = "us";
@@ -89,7 +123,7 @@
     targets.hybrid-sleep.enable = false;
     network.wait-online.enable = false;
   };
-
+  networking.useNetworkd = false;
   networking = {
     hostName = "${hostname}";
     firewall = {
@@ -112,7 +146,6 @@
           to = 8010;
         }
       ];
-
     };
   };
   systemd.network.enable = true;
@@ -139,9 +172,10 @@
     };
   };
 
-  microvm.autostart = [
-    "vm-services"
-  ];
+  # microvm.autostart = [
+  #   "vm-services"
+  #
+  #];
 
   nix.settings.experimental-features = [
     "nix-command"
