@@ -46,12 +46,10 @@
   };
 
   environment.systemPackages = with pkgs; [
-    moonlight-qt
     proton-vpn-local-agent
     protonvpn-gui
     protonmail-desktop
     signal-desktop
-    heroic
     git
     wget
     vim
@@ -61,7 +59,6 @@
     curl
     direnv
   ];
-  hardware.graphics.enable = true;
   fonts.packages = with pkgs; [ nerdfonts ];
   services.tailscale.enable = true;
   services.sunshine = {
@@ -104,7 +101,6 @@
     layout = "us";
     variant = " ";
   };
-  hardware.pulseaudio.enable = false;
 
   security.rtkit.enable = true;
 

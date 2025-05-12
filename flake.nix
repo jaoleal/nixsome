@@ -17,7 +17,7 @@
           username = "jaoleal";
           userland = false;
           extraModules = [
-            inputs.stylix.nixosModules.stylix
+           # inputs.stylix.nixosModules.stylix
 
             inputs.microvm.nixosModules.host
           ];
@@ -27,11 +27,12 @@
 
           hostname = "userland";
           username = "jaoleal";
-          userland = true;
+          userland = false;
           extraModules = [
-            inputs.stylix.nixosModules.stylix
-            inputs.niri.nixosModules.niri
-            inputs.microvm.nixosModules.host
+           <home-manager/nixos>
+           # inputs.home-manager.nixosModules.home-manager
+            #            inputs.stylix.nixosModules.stylix
+            #           inputs.niri.nixosModules.niri
           ];
         };
 
@@ -52,9 +53,9 @@
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
     };
-    niri = {
-      url = "github:sodiboo/niri-flake";
-    };
+    #  niri = {
+    # url = "github:sodiboo/niri-flake";
+    # };
     microvm = {
       url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -62,12 +63,13 @@
     utreexod-flake = {
       url = "github:jaoleal/utreexod-flake";
     };
-    stylix = {
-      url = "github:danth/stylix";
-    };
+    #stylix = {
+    #  url = "github:danth/stylix";
+    #};
+    nixpkgs-unstable.url = "github:nixos/nixpkgs-channels/nixos-unstable";
+
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     floresta = {
       url = "git+https://github.com/jaoleal/Floresta?ref=more-flake-checks";

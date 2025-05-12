@@ -9,7 +9,7 @@ set-hman:
 # Make a nixos switch on target
 up target:
     @just _set-sysconf
-    sudo nixos-rebuild switch --flake /etc/nixos/#{{target}}
+    sudo nixos-rebuild switch --flake /etc/nixos/#{{target}} --impure
 
 # Executes check on target
 check target:

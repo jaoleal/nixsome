@@ -1,12 +1,10 @@
-{ inputs, username, ... }:
+{ inputs, ... }:
 {
   imports = [
-    inputs.home-manager.nixosModules.home-manager
     ./home.nix
     ./userland.nix
+    ./../../hardware-config/laptop-hardware.nix
   ];
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-  home-manager.users.${username} = ./home.nix;
-
 }

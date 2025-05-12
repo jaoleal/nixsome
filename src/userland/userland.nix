@@ -1,13 +1,15 @@
 {
   pkgs,
   username,
+  stateVersion,
   ...
 }:
 {
 
   users.users.${username} = {
+    name = username;
     isNormalUser = true;
-    description = "Joao Leal";
+    description = "${username}";
     initialPassword = "123";
     extraGroups = [
       "networkmanager"
@@ -26,17 +28,14 @@
     "nix-command"
     "flakes"
   ];
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = stateVersion; # Did you read the comment?
+
+  networking.networkmanager.enable = true;
+  security.rtkit.enable = true;
 
   services = {
 
-    hardware.pulseaudio.enable = false;
-
     tailscale.enable = true;
-
-    security.rtkit.enable = true;
-
-    networking.networkmanager.enable = true;
 
     xserver = {
 
@@ -49,30 +48,15 @@
       };
     };
 
-    i18n.defaultLocale = "en_US.UTF-8";
-
     flatpak.enable = true;
 
-    gpg-agent = {
-      enable = true;
-      sshKeys = [ "17E5F552FCCEC23CD086C617298E5BD0BAF906BD" ];
-      enableSshSupport = true;
-      defaultCacheTtlSsh = 4000;
-      defaultCacheTtl = 34560000;
-      maxCacheTtl = 34560000;
-      enableBashIntegration = true;
-      enableScDaemon = true;
-      grabKeyboardAndMouse = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
-    };
-
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
   };
 
-  boot.loader.systemd-boot.enable = true;
+  boot = {
+    loader.systemd-boot.enable = true;
+    kernelParams = [
+      "acpi_osi=!"
+      ''acpi_osi="Windows 2022"''
+    ];
+  };
 }
