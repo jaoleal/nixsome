@@ -150,11 +150,10 @@
               };
             };
           };
-
           ssh_connections = [
             {
               host = "sv";
-              projects = [ ''{ "paths": ["~/code/zed/zed"] }'' ];
+              projects = [ { paths = [ "~/Work/floresta" ]; } ];
             }
           ];
           lsp = {
