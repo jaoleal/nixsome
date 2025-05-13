@@ -1,8 +1,9 @@
-{}: {
+{ ... }:
+{
+  buildNixos = (import ./builder.nix {}).buildNixos;
   imports = [
-    ./backend.nix
-    ./home.nix
-    ./userland.nix
-    ./hardware-configuration.nix
+    ./graphical_minimal.nix
+    ./graphical_standard.nix
   ];
+
 }

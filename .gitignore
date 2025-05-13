@@ -2,3 +2,5 @@ hardware-configuration.nix
 .minecraft
 logs
 .hmcl.json
+/result
+*.qcow2
