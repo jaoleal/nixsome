@@ -14,7 +14,7 @@
     let
           pkgs = import inputs.nixpkgs {
              inherit system;
-      
+
              config.allowUnfree = true;
             };
       #pkgs = import inputs.nixpkgs-unstable {
@@ -56,6 +56,7 @@
       };
       modules = [
         ./${hostname}
+        ./users/${username}
 
         ./graphical_minimal.nix
         # intraNetworkModule

@@ -49,8 +49,11 @@ in
 
   services.sunshine = {
     enable = true;
+
     autoStart = true;
+
     capSysAdmin = true;
+
     openFirewall = true;
 
     environment = {
@@ -58,24 +61,33 @@ in
         "$PATH"
         "$HOME/.local/bin"
       ];
+
       DISPLAY = ":0";
+
     };
 
     applications = {
       apps = [
         {
           name = "steam";
+
           prep-cmd = [
             {
               do = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --mode ${"$SUNSHINE_CLIENT_WIDTH"}x${"$SUNSHINE_CLIENT_HEIGHT"} --rate ${"$SUNSHINE_CLIENT_FPS"}";
+
               undo = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --mode 2560x1440 --rate 120";
+
             }
           ];
+
           exclude-global-prep-cmd = false;
+
           auto-detach = true;
+
           detached-commands = [
             "${pkgs.steam}/bin/steam steam://open/bigpicture"
           ];
+
         }
       ];
     };
