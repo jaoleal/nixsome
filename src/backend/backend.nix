@@ -2,16 +2,17 @@
   pkgs,
   username,
   hostname,
+  stateVersion,
   ...
 }:
 {
+  system.stateVersion = stateVersion;
   users = {
-    users.${username} = {
+    users.service-runner = {
       isNormalUser = true;
       linger = true;
-      name = username;
-      description = "${username}";
-      initialPassword = "cadu";
+      name = "service-runner";
+      description = "service-runner, user that owns backservices";
       extraGroups = [
         "networkmanager"
         "wheel"
@@ -19,7 +20,34 @@
       ];
     };
     mutableUsers = true;
-    groups.libvirtd.members = [ "${username}" ];
+    groups.libvirtd.members = [ "service-runner" ];
+  };
+  services.minecraft-server = {
+    enable = true;
+    eula = true; # Required to accept Mojang's EULA
+    package = pkgs.papermc; # Better performance than vanilla
+    openFirewall = true; # Allows connections on port 25565
+    declarative = true; # Ensures config is managed by NixOS
+
+    # Basic server settings (customize as needed)
+    serverProperties = {
+      server-port = 25565;
+      difficulty = "hard";
+      gamemode = "survival";
+      max-players = 50;
+      motd = "CypherCraft~!!";
+      online-mode = true; # Set to false for offline/cracked servers
+    };
+
+    # Optimized JVM flags for massive RAM (64GB allocated)
+    jvmOpts = ''
+      -Xms64G -Xmx64G
+      -XX:+UseG1GC
+      -XX:+UnlockExperimentalVMOptions
+      -XX:MaxGCPauseMillis=100
+      -XX:+AlwaysPreTouch
+      -XX:ParallelGCThreads=8
+    '';
   };
 
   services = {
@@ -66,27 +94,6 @@
     autoStart = true;
     capSysAdmin = true;
     openFirewall = true;
-    #applications = {
-    #  env = {
-    #    PATH = "$(PATH):$(HOME)/.local/bin";
-    #  };
-    #  apps = [
-    #    {
-    #      name = "steam";
-    #      prep-cmd = [
-    #        {
-    #            do = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --mode $(SUNSHINE_CLIENT_WIDTH)x$(SUNSHINE_CLIENT_HEIGHT) --rate $(SUNSHINE_CLIENT_FPS)";
-    #            undo = "${pkgs.xorg.xrandr}/bin/xrandr --output DP-3 --mode 2560x1440 --rate 120";
-    #          }
-    #        ];
-    #        exclude-global-prep-cmd = "false";
-    #        auto-detach = "true";
-    #        detached-commands = [
-    #          "setsid steam steam://open/bigpicture"
-    #        ];
-    #      }
-    #    ];
-    #  };
 
   };
   services.xserver = {
@@ -119,7 +126,7 @@
     targets.hybrid-sleep.enable = false;
     network.wait-online.enable = false;
   };
-  networking.useNetworkd = false;
+  networking.useNetworkd = true;
   networking = {
     hostName = "${hostname}";
     firewall = {

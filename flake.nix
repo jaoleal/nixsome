@@ -15,34 +15,24 @@
 
           hostname = "backend";
           username = "jaoleal";
-          userland = false;
+          userland = true;
           extraModules = [
-           # inputs.stylix.nixosModules.stylix
-
+            # inputs.stylix.nixosModules.stylix
+            inputs.niri.nixosModules.niri
             inputs.microvm.nixosModules.host
+            inputs.home-manager.nixosModules.home-manager
           ];
         };
-        userland = src.buildNixos {
+        wsl-userland = src.buildNixos {
           inherit inputs system stateVersion;
 
           hostname = "userland";
           username = "jaoleal";
           userland = false;
           extraModules = [
-           <home-manager/nixos>
-           # inputs.home-manager.nixosModules.home-manager
-            #            inputs.stylix.nixosModules.stylix
-            #           inputs.niri.nixosModules.niri
+            inputs.home-manager.nixosModules.home-manager
           ];
         };
-
-        #vm-services = inputs.nixpkgs.lib.nixosSystem {
-        #  system = "x86_64-linux";
-        #  modules = [
-        #    ./src/services.nix
-        #    inputs.microvm.nixosModules
-        #  ];
-        #};
       };
     };
 
@@ -53,9 +43,9 @@
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
     };
-    #  niri = {
-    # url = "github:sodiboo/niri-flake";
-    # };
+    niri = {
+      url = "github:sodiboo/niri-flake";
+    };
     microvm = {
       url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -63,14 +53,15 @@
     utreexod-flake = {
       url = "github:jaoleal/utreexod-flake";
     };
-    #stylix = {
-    #  url = "github:danth/stylix";
-    #};
+    stylix = {
+      url = "github:danth/stylix";
+    };
     nixpkgs-unstable.url = "github:nixos/nixpkgs-channels/nixos-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-24.11";
     };
+
     floresta = {
       url = "git+https://github.com/jaoleal/Floresta?ref=more-flake-checks";
     };

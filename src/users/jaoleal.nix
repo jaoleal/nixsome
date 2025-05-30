@@ -5,6 +5,8 @@
   ...
 }:
 {
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
   users.users.${username} = {
     name = username;
     isNormalUser = true;
@@ -15,12 +17,14 @@
       "wheel"
       "libvirtd"
     ];
-    fonts.packages = with pkgs; [ nerdfonts ];
 
     # User packages are specified via home-manager
-    packages = with pkgs; = [
+    packages = with pkgs; [
       pkg-config
       moonlight-qt
+      atlauncher
+      prismlauncher
+      lunar-client
       proton-vpn-local-agent
       protonvpn-gui
       protonmail-desktop
@@ -41,14 +45,15 @@
       gnupg
       nixfmt-rfc-style
       nil
+      rustup
     ];
   };
+  fonts.packages = with pkgs; [ nerdfonts ];
   home-manager.users.${username} = {
-
     home = {
       inherit username stateVersion; # Dont change
 
-      homeDirectory = "/home/jaoleal";
+      homeDirectory = "/home/${username}";
       # Packages are defined in user packages.
       # packages = with pkgs; [];
       file = { };

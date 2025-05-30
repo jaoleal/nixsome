@@ -1,4 +1,3 @@
-
 { ... }:
 {
   buildNixos =
@@ -12,16 +11,16 @@
       extraModules ? [ ],
     }:
     let
-          pkgs = import inputs.nixpkgs {
-             inherit system;
+      pkgs = import inputs.nixpkgs {
+        inherit system;
 
-             config.allowUnfree = true;
-            };
+        config.allowUnfree = true;
+      };
       #pkgs = import inputs.nixpkgs-unstable {
       #  inherit system;
-#
- #       config.allowUnfree = true;
-  #    };
+      #
+      #       config.allowUnfree = true;
+      #    };
       unstablePkgs = import inputs.nixpkgs-unstable {
         inherit system;
 
@@ -32,11 +31,11 @@
 
       _assertUsername = pkgs.lib.asserts.assertMsg (username == "") "you must specify a username!";
 
-      #graphicalMod =
-      #  if userland then
-      #    (import ./graphical_standard.nix { inherit inputs pkgs; })
-      #  else
-      #    (import ./graphical_minimal.nix { inherit pkgs; });
+      graphicalMod =
+        if userland then
+          (import ./graphical_standard.nix { inherit inputs pkgs; })
+        else
+          (import ./graphical_minimal.nix { inherit pkgs; });
 
       #intraNetworkModule = import ./intra-network.nix;
 
@@ -56,9 +55,9 @@
       };
       modules = [
         ./${hostname}
-        ./users/${username}
+        ./users/${username}.nix
+        graphicalMod
 
-        ./graphical_minimal.nix
         # intraNetworkModule
       ] ++ extraModules;
     };

@@ -1,7 +1,6 @@
-{ inputs, ... }:
+{  ... }:
 {
   imports = [
-    ./home.nix
     ./userland.nix
     ./../../hardware-config/laptop-hardware.nix
   ];
