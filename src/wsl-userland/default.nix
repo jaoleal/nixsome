@@ -1,8 +1,7 @@
-{  ... }:
+{ ... }:
 {
   imports = [
-    ./userland.nix
-    ./../../hardware-config/laptop-hardware.nix
+    ./wsl.nix
   ];
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;

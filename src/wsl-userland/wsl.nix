@@ -1,8 +1,23 @@
 {
   stateVersion,
+  username,
   ...
 }:
 {
+
+  wsl = {
+    enable = true;
+    startMenuLaunchers = true;
+    usbip = {
+      enable = true;
+      autoAttach = [
+        "1-7"
+      ];
+    };
+    wslConf.user.default = username;
+    useWindowsDriver = true;
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   time.timeZone = "America/Sao_Paulo";

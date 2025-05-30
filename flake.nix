@@ -26,10 +26,11 @@
         wsl-userland = src.buildNixos {
           inherit inputs system stateVersion;
 
-          hostname = "userland";
+          hostname = "wsl-userland";
           username = "jaoleal";
           userland = false;
           extraModules = [
+            inputs.nixos-wsl.nixosModules.default
             inputs.home-manager.nixosModules.home-manager
           ];
         };
@@ -56,8 +57,12 @@
     stylix = {
       url = "github:danth/stylix";
     };
-    nixpkgs-unstable.url = "github:nixos/nixpkgs-channels/nixos-unstable";
-
+    nixpkgs-unstable = {
+      url = "github:nixos/nixpkgs-channels/nixos-unstable";
+    };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/release-24.11";
     };
