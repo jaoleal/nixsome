@@ -4,3 +4,4 @@ logs
 .hmcl.json
 /result
 *.qcow2
+*.qcow

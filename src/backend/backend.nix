@@ -20,8 +20,18 @@
       ];
     };
     mutableUsers = true;
-    groups.libvirtd.members = [ "service-runner" ];
+    groups.libvirtd.members = [
+      "service-runner"
+      username
+    ];
   };
+
+  programs.virt-manager.enable = true;
+
+  virtualisation.libvirtd.enable = true;
+
+  virtualisation.spiceUSBRedirection.enable = true;
+
   services.minecraft-server = {
     enable = true;
     eula = true; # Required to accept Mojang's EULA
@@ -79,6 +89,7 @@
     protonmail-desktop
     signal-desktop
     git
+    nautilus
     wget
     vim
     usbutils
@@ -86,6 +97,8 @@
     usbutils
     curl
     direnv
+    jetbrains.rust-rover
+    swtpm
   ];
   fonts.packages = with pkgs; [ nerdfonts ];
   services.tailscale.enable = true;

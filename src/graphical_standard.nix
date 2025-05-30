@@ -13,30 +13,28 @@ in
   programs = {
     niri = {
       enable = true;
-
     };
-
-    waybar.enable = true;
 
     dconf.enable = true;
   };
 
   environment = {
     systemPackages = with pkgs; [
-
       waybar
+      nwg-bar
+      swaylock-effects
+      mako
       swww
       fuzzel
       swaylock-effects
-      mako
-
+      swaybg
+      swayidle
+      xwayland-satellite
       xdg-desktop-portal-gtk
       xdg-desktop-portal-wlr
       xdg-utils
-
       wl-clipboard
       swaylock
-
       networkmanagerapplet
       pavucontrol
     ];
@@ -82,29 +80,5 @@ in
 
   # Disable screen blanking
   services.xserver.xautolock.enable = false;
-
-  services.swayidle = {
-    enable = true;
-    timeouts = [
-      # Turn off screen after 5 minutes, but don't lock
-      {
-        timeout = 300;
-        command = "${pkgs.sway}/bin/swaymsg 'output * dpms off'";
-        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * dpms on'";
-      }
-    ];
-
-    # Lock immediately when switching to idle state
-    events = [
-      {
-        event = "before-sleep";
-        command = "${pkgs.swaylock-effects}/bin/swaylock";
-      }
-      {
-        event = "lock";
-        command = "${pkgs.swaylock-effects}/bin/swaylock";
-      }
-    ];
-  };
 
 }
