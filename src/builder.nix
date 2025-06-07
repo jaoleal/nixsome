@@ -23,16 +23,6 @@
         config.allowUnfree = true;
       };
 
-      _assertHostname = pkgs.lib.asserts.assertMsg (hostname == "") "you must specify a hostname!";
-
-      _assertUsername = pkgs.lib.asserts.assertMsg (username == "") "you must specify a username!";
-
-      graphicalMod =
-        if userland then
-          (import ./graphical_standard.nix { inherit inputs pkgs; })
-        else
-          (import ./graphical_minimal.nix { inherit pkgs; });
-
       #intraNetworkModule = import ./intra-network.nix;
 
     in
@@ -52,7 +42,7 @@
       modules = [
         ./${hostname}
         ./users/${username}.nix
-        graphicalMod
+        ./graphical_interface.nix
 
         # intraNetworkModule
       ] ++ extraModules;

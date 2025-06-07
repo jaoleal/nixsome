@@ -202,7 +202,9 @@
 
     initrd.systemd.network.wait-online.enable = false;
 
-    loader.systemd-boot.enable = true;
+    loader.grub.enable = true;
+    loader.grub.device = "nodev";
+    loader.grub.useOSProber = true;
 
     kernelPackages = pkgs.linuxPackages;
 

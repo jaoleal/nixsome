@@ -15,10 +15,7 @@
 
           hostname = "backend";
           username = "jaoleal";
-          userland = true;
           extraModules = [
-            # inputs.stylix.nixosModules.stylix
-            inputs.niri.nixosModules.niri
             inputs.microvm.nixosModules.host
             inputs.home-manager.nixosModules.home-manager
           ];
@@ -28,7 +25,6 @@
 
           hostname = "wsl-userland";
           username = "jaoleal";
-          userland = false;
           extraModules = [
             inputs.nixos-wsl.nixosModules.default
             inputs.home-manager.nixosModules.home-manager
