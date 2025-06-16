@@ -1,6 +1,7 @@
 {
   stateVersion,
   username,
+pkgs,
   ...
 }:
 {
@@ -14,9 +15,34 @@
         "1-7"
       ];
     };
-    wslConf.user.default = username;
+
     useWindowsDriver = true;
+	defaultUser = username;
+	};
+
+	users.users.root = {
+		name =  "root";
+	hashedPassword =  "$y$j9T$c79Lyfiy4jwaboa8I8CXW0$4cxD4o/NaqwgYBQ3V0iAV6WL3v1eT0YP8OSuUndvxx9";
+#	description = "A root user for the wsl nixos";
+	isSystemUser = true;
+};
+
+environment.systemPackages = with pkgs; [
+	jetbrains.rust-rover
+	jetbrains.gateway
+];
+
+services.openssh = {
+  enable = true;
+  ports = [ 22 ];
+  settings = {
+    PasswordAuthentication = true;
+    AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ]
+    UseDns = true;
+    X11Forwarding = false;
+    PermitRootLogin = "prohibit-password"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
   };
+};
 
   nixpkgs.config.allowUnfree = true;
 
@@ -45,7 +71,7 @@
     };
   };
 
-  boot = {
-    loader.systemd-boot.enable = true;
-  };
+  # boot = {
+  #  loader.systemd-boot.enable = true;
+  # };
 }

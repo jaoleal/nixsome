@@ -11,8 +11,9 @@
     name = username;
     isNormalUser = true;
     description = "${username}";
-    initialPassword = "123";
-    extraGroups = [
+    #initialPassword = "123";
+	hashedPassword = "$y$j9T$F8L9DbGkN22.hwMIXOEIb1$6TtjVOcJB9Tcadv/V.dlwYzbWMfJR6UV7ABdINvgwN8";    
+	extraGroups = [
       "networkmanager"
       "wheel"
       "libvirtd"
@@ -21,15 +22,6 @@
     # User packages are specified via home-manager
     packages = with pkgs; [
       pkg-config
-      moonlight-qt
-      atlauncher
-      prismlauncher
-      lunar-client
-      proton-vpn-local-agent
-      protonvpn-gui
-      protonmail-desktop
-      signal-desktop
-      heroic
       git
       wget
       vim
@@ -39,7 +31,7 @@
       direnv
       openssl
       clang
-      vial
+      #vial
       git
       zed-editor
       gnupg
@@ -48,7 +40,7 @@
       rustup
     ];
   };
-  fonts.packages = with pkgs; [ nerdfonts ];
+
   home-manager.users.${username} = {
     home = {
       inherit username stateVersion; # Dont change
@@ -85,6 +77,12 @@
 
       };
     };
+
+	  dconf = {
+    enable = true;
+    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  };
+
     programs = {
 
       direnv = {
@@ -111,13 +109,22 @@
         enable = true;
 
         bashrcExtra = ''
-          	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-          	gpgconf --launch gpg-agent
-        '';
+            export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+           gpgconf --launch gpg-agent
+           export ZED_ALLOW_EMULATED_GPU=1
+           export DISPLAY=$(route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.00 
+           export LIBGL_ALWAYS_INDIRECT=1
+'';
+
+	shellAliases = {
+	
+	zed = ''WAYLAND_DISPLAY="" zeditor'';
+};
+
 
       };
       chromium = {
-        enable = true;
+        enable = false;
 
         extensions = [
           { id = "ddkjiahejlhfcafbddmgiahcphecmpfh"; } # Ublock

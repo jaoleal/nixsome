@@ -84,15 +84,15 @@
   };
 
   environment.systemPackages = with pkgs; [
-    proton-vpn-local-agent
-    protonvpn-gui
-    protonmail-desktop
+    #proton-vpn-local-agent
+    #protonvpn-gui
+    #protonmail-desktop
     signal-desktop
     git
     nautilus
     wget
     vim
-    usbutils
+    # usbutils
     just
     usbutils
     curl
@@ -100,7 +100,7 @@
     jetbrains.rust-rover
     swtpm
   ];
-  fonts.packages = with pkgs; [ nerdfonts ];
+  #fonts.packages = with pkgs; [ nerdfonts ];
   services.tailscale.enable = true;
   services.sunshine = {
     enable = true;

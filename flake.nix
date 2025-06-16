@@ -6,7 +6,7 @@
       src = import ./src { };
 
       system = "x86_64-linux";
-      stateVersion = "24.11";
+      stateVersion = "25.05";
     in
     {
       nixosConfigurations = {
@@ -35,7 +35,7 @@
 
   inputs = {
     nixpkgs = {
-      url = "github:nixos/nixpkgs/nixos-24.11";
+      url = "github:nixos/nixpkgs/nixos-25.05";
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
@@ -60,7 +60,7 @@
       url = "github:nix-community/NixOS-WSL/main";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/release-25.05";
     };
 
     floresta = {
