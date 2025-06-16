@@ -4,7 +4,7 @@ default:
 # Set the last home-manager generation to active.
 set-hman:
     @just _set-homeconf
-    home-manager switch
+    home-manager switch --flake .#$(whoami)
 
 # Make a nixos switch on target
 up target:
@@ -37,7 +37,6 @@ _set-sysconf:
 
 # Move some files around to make home-manager satisfied.
 _set-homeconf:
-    #!/usr/bin/env bash
     rm -rf ~/.config/home-manager
     mkdir -p ~/.config/home-manager
-    cp -r ./src/home.nix ~/.config/home-manager/
+    cp -r . ~/.config/home-manager/
