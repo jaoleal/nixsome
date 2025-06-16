@@ -9,6 +9,27 @@
       stateVersion = "25.05";
     in
     {
+      homeConfigurations."jaoleal" = inputs.home-manager.lib.homeManagerConfiguration {
+         pkgs = import inputs.nixpkgs {
+                        inherit system;
+
+                        config.allowUnfree = true;
+                        };
+        
+	# Specify your home configuration modules here, for example,
+        # the path to your home.nix.
+        modules = [ ./src/portable.nix ];
+	
+	extraSpecialArgs = {
+		inherit system stateVersion;
+		username = "jaoleal";
+		pkgs = import inputs.nixpkgs {
+        		inherit system;
+
+        		config.allowUnfree = true;
+        		};
+       	};
+      };
       nixosConfigurations = {
         backend = src.buildNixos {
           inherit inputs system stateVersion;
