@@ -12,8 +12,8 @@
     isNormalUser = true;
     description = "${username}";
     #initialPassword = "123";
-	hashedPassword = "$y$j9T$F8L9DbGkN22.hwMIXOEIb1$6TtjVOcJB9Tcadv/V.dlwYzbWMfJR6UV7ABdINvgwN8";    
-	extraGroups = [
+	  hashedPassword = "$y$j9T$F8L9DbGkN22.hwMIXOEIb1$6TtjVOcJB9Tcadv/V.dlwYzbWMfJR6UV7ABdINvgwN8";    
+	  extraGroups = [
       "networkmanager"
       "wheel"
       "libvirtd"
@@ -73,17 +73,46 @@
 
         grabKeyboardAndMouse = true;
 
-        pinentryPackage = pkgs.pinentry-gnome3;
+        pinentryPackage = pkgs.pinentry-tty;
 
       };
     };
 
 	  dconf = {
-    enable = true;
-    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
-  };
+      enable = true;
+      settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+    };
 
     programs = {
+      helix = {
+        enable = true;
+        languages.language = [
+          {
+            name = "nix";
+            auto-format = true;
+            formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
+          }
+          {
+            name = "rust";
+            auto-format = true;
+          }
+          {
+          name = "toml";
+          formatter = {
+            command = "taplo";
+            args = ["fmt" "-"];
+          };
+            auto-format = false;
+          }
+          {
+            name = "bash";
+            formatter = {
+              command = "shfmt";
+            };
+          }
+        ];
+      };
+  
 
       direnv = {
         enable = true;
@@ -110,10 +139,10 @@
 
         bashrcExtra = ''
             export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-           gpgconf --launch gpg-agent
-           export ZED_ALLOW_EMULATED_GPU=1
-           export DISPLAY=$(route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.00 
-           export LIBGL_ALWAYS_INDIRECT=1
+             gpgconf --launch gpg-agent
+             export ZED_ALLOW_EMULATED_GPU=1
+             export DISPLAY=$(route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.00 
+             export LIBGL_ALWAYS_INDIRECT=1
 '';
 
 	shellAliases = {
