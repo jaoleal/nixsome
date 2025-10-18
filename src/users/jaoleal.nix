@@ -12,14 +12,13 @@
     isNormalUser = true;
     description = "${username}";
     #initialPassword = "123";
-	  hashedPassword = "$y$j9T$F8L9DbGkN22.hwMIXOEIb1$6TtjVOcJB9Tcadv/V.dlwYzbWMfJR6UV7ABdINvgwN8";    
-	  extraGroups = [
+    hashedPassword = "$y$j9T$F8L9DbGkN22.hwMIXOEIb1$6TtjVOcJB9Tcadv/V.dlwYzbWMfJR6UV7ABdINvgwN8";
+    extraGroups = [
       "networkmanager"
       "wheel"
       "libvirtd"
     ];
 
-    # User packages are specified via home-manager
     packages = with pkgs; [
       pkg-config
       git
@@ -31,9 +30,8 @@
       direnv
       openssl
       clang
-      #vial
+      vial
       git
-      zed-editor
       gnupg
       nixfmt-rfc-style
       nil
@@ -78,11 +76,6 @@
       };
     };
 
-	  dconf = {
-      enable = true;
-      settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
-    };
-
     programs = {
       helix = {
         enable = true;
@@ -97,11 +90,14 @@
             auto-format = true;
           }
           {
-          name = "toml";
-          formatter = {
-            command = "taplo";
-            args = ["fmt" "-"];
-          };
+            name = "toml";
+            formatter = {
+              command = "taplo";
+              args = [
+                "fmt"
+                "-"
+              ];
+            };
             auto-format = false;
           }
           {
@@ -112,7 +108,6 @@
           }
         ];
       };
-  
 
       direnv = {
         enable = true;
@@ -120,6 +115,7 @@
         nix-direnv.enable = true;
 
       };
+
       alacritty.enable = true;
 
       git = {
@@ -138,20 +134,11 @@
         enable = true;
 
         bashrcExtra = ''
-            export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-             gpgconf --launch gpg-agent
-             export ZED_ALLOW_EMULATED_GPU=1
-             export DISPLAY=$(route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.00 
-             export LIBGL_ALWAYS_INDIRECT=1
-'';
-
-	shellAliases = {
-	
-	zed = ''WAYLAND_DISPLAY="" zeditor'';
-};
-
-
+          export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+          gpgconf --launch gpg-agent
+        '';
       };
+      
       chromium = {
         enable = false;
 
@@ -161,100 +148,6 @@
           { id = "mnjggcdmjocbbbhaepdhchncahnbgone"; } # Sponsor Block
           { id = "ncmflpbbagcnakkolfpcpogheckolnad"; } # Nostr Profiles
         ];
-      };
-      zed-editor = {
-        enable = true;
-
-        package = pkgs.zed-editor;
-
-        userSettings = {
-          buffer_font_family = "Source Code Pro";
-
-          restore_on_startup = "last_workspace";
-
-          autoscroll_on_clicks = true;
-
-          load_direnv = "direct";
-
-          base_keymap = "VSCode";
-
-          theme = {
-            mode = "system";
-
-            dark = "Gruvbox Dark Soft";
-
-            light = "Gruvbox Material";
-
-          };
-          terminal = {
-            copy_on_select = true;
-
-            font_family = "UbuntuMono Nerd Font Mono";
-
-          };
-          current_line_highlight = "line";
-
-          inline_completions_disabled_in = {
-            disabled_in = [
-              "comment"
-              "string"
-            ];
-
-          };
-          autosave = {
-            after_delay = {
-              milliseconds = 1000;
-
-            };
-          };
-
-          scrollbar = {
-            show = "auto";
-
-            cursors = false;
-
-            axes = {
-              horizontal = true;
-
-              vertical = true;
-
-            };
-          };
-          languages = {
-            Nix = {
-              language_servers = [
-                "nil"
-                "!nixd"
-              ];
-
-              formatter = {
-                external = {
-                  command = "nixfmt";
-                };
-              };
-            };
-          };
-
-          ssh_connections = [
-            {
-              host = "sv";
-              projects = [ { paths = [ "~/Work/floresta" ]; } ];
-            }
-          ];
-
-          lsp = {
-            rust-analyzer = {
-              binary = {
-                path = "${pkgs.rustup}/bin/rust-analyzer";
-              };
-            };
-            nil = {
-              binary = {
-                path = "${pkgs.nil}/bin/nil";
-              };
-            };
-          };
-        };
       };
     };
   };

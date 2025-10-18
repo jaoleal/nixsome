@@ -2,6 +2,6 @@
 {
   imports = [
     ./backend.nix
-    ./../../hardware-config/backend-hardware.nix
+    ./../../hardware-config/hardware-configuration.nix
   ];
 }
