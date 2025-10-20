@@ -30,6 +30,16 @@
             inputs.home-manager.nixosModules.home-manager
           ];
         };
+        floresta-mini-node = src.buildNixos {
+          inherit inputs system stateVersion;
+
+          hostname = "floresta-mini-node";
+          username = "cubo";
+          extraModules = [
+            inputs.floresta.packages.${system}
+            inputs.home-manager.nixosModules.home-manager
+          ];
+        };
       };
     };
 
@@ -49,6 +59,9 @@
     };
     utreexod-flake = {
       url = "github:jaoleal/utreexod-flake";
+    };
+    floresta = {
+      url = "github:jaoleal/floresta";
     };
     stylix = {
       url = "github:danth/stylix";
