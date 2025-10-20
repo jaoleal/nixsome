@@ -57,12 +57,6 @@
       url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    utreexod-flake = {
-      url = "github:jaoleal/utreexod-flake";
-    };
-    floresta = {
-      url = "github:jaoleal/floresta";
-    };
     stylix = {
       url = "github:danth/stylix";
     };
@@ -74,10 +68,6 @@
     };
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
-    };
-
-    floresta = {
-      url = "git+https://github.com/jaoleal/Floresta?ref=more-flake-checks";
     };
   };
 }
