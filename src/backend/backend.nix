@@ -71,28 +71,31 @@
   services.xserver = {
     videoDrivers = [ "amdgpu" ];
     enable = true;
-  
-  displayManager.gdm.enable = true;
-  desktopManager.gnome.enable = true;
+
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
 
   };
-  environment.gnome.excludePackages = (with pkgs; [
-  atomix # puzzle game
-  cheese # webcam tool
-  epiphany # web browser
-  evince # document viewer
-  geary # email reader
-  gedit # text editor
-  gnome-characters
-  gnome-music
-  gnome-photos
-  gnome-terminal
-  gnome-tour
-  hitori # sudoku game
-  iagno # go game
-  tali # poker game
-  totem # video player
-]);
+  environment.gnome.excludePackages = (
+    with pkgs;
+    [
+      atomix # puzzle game
+      cheese # webcam tool
+      epiphany # web browser
+      evince # document viewer
+      geary # email reader
+      gedit # text editor
+      gnome-characters
+      gnome-music
+      gnome-photos
+      gnome-terminal
+      gnome-tour
+      hitori # sudoku game
+      iagno # go game
+      tali # poker game
+      totem # video player
+    ]
+  );
 
   nixpkgs.config.allowUnfree = true;
 
@@ -115,6 +118,13 @@
     '';
     targets.sleep.enable = false;
     targets.suspend.enable = false;
+    network = {
+      enable = true;
+      networks."10-lan" = {
+        matchConfig.Name = "lan";
+        networkConfig.DHCP = "ipv4";
+      };
+    };
     targets.hibernate.enable = false;
     targets.hybrid-sleep.enable = false;
     network.wait-online.enable = false;
@@ -126,14 +136,14 @@
 
   boot = {
 
-#    initrd.systemd.network.wait-online.enable = false;
+    #    initrd.systemd.network.wait-online.enable = false;
 
-   # loader.grub.enable = true;
-   # loader.grub.device = "nodev";
-   # loader.grub.useOSProber = true;
- # Use the systemd-boot EFI boot loader.
-  loader.systemd-boot.enable = true;
-  loader.efi.canTouchEfiVariables = true;
+    # loader.grub.enable = true;
+    # loader.grub.device = "nodev";
+    # loader.grub.useOSProber = true;
+    # Use the systemd-boot EFI boot loader.
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
 
     kernelPackages = pkgs.linuxPackages;
 
