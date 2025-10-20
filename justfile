@@ -28,7 +28,7 @@ allow:
 # Move some files around to make nixos satisfied.
 _set-sysconf:
     #!/usr/bin/env bash
-    cp /etc/nixos/src/hardware-configuration.nix ./src/.
+    cp /etc/nixos/src/hardware-configuration.nix ./src/hardware-config/hardware-configuration.nix
     rm -rf /etc/nixos/*
     cp -r ./src /etc/nixos/
     cp -r hardware-config/ /etc/nixos/
