@@ -16,7 +16,6 @@
           hostname = "backend";
           username = "jaoleal";
           extraModules = [
-            inputs.microvm.nixosModules.host
             inputs.home-manager.nixosModules.home-manager
           ];
         };
@@ -50,22 +49,6 @@
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
     };
-    niri = {
-      url = "github:sodiboo/niri-flake";
-    };
-    microvm = {
-      url = "github:astro/microvm.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    utreexod-flake = {
-      url = "github:jaoleal/utreexod-flake";
-    };
-    floresta = {
-      url = "github:jaoleal/floresta";
-    };
-    stylix = {
-      url = "github:danth/stylix";
-    };
     nixpkgs-unstable = {
       url = "github:nixos/nixpkgs-channels/nixos-unstable";
     };
@@ -74,10 +57,6 @@
     };
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
-    };
-
-    floresta = {
-      url = "git+https://github.com/jaoleal/Floresta?ref=more-flake-checks";
     };
   };
 }
