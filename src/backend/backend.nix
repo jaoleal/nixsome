@@ -7,25 +7,6 @@
 }:
 {
   system.stateVersion = stateVersion;
-  users = {
-    users.service-runner = {
-      isNormalUser = true;
-      linger = true;
-      name = "service-runner";
-      description = "service-runner, user that owns backservices";
-      extraGroups = [
-        "networkmanager"
-        "wheel"
-        "libvirtd"
-      ];
-    };
-    mutableUsers = true;
-    groups.libvirtd.members = [
-      "service-runner"
-      username
-    ];
-  };
-
   services = {
     openssh = {
       enable = true;
@@ -145,8 +126,14 @@
     "nix-command"
     "flakes"
   ];
+   # Export systemd metrics on localhost:9558
+
 
   boot = {
+
+    kernelParams = [
+      "video=HDMI-0:2560x1440@60"
+    ];
 
     loader = {
       grub = {
