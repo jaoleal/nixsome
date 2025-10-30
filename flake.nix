@@ -50,13 +50,14 @@
       url = "github:nix-community/nixos-vscode-server";
     };
     nixpkgs-unstable = {
-      url = "github:nixos/nixpkgs-channels/nixos-unstable";
+      url = "github:nixos/nixpkgs/nixos-unstable";
     };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 }
