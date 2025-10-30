@@ -1,4 +1,3 @@
-hardware-configuration.nix
 .minecraft
 logs
 .hmcl.json

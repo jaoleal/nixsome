@@ -26,7 +26,7 @@
       #intraNetworkModule = import ./intra-network.nix;
 
     in
-    inputs.nixpkgs.lib.nixosSystem {
+    inputs.nixpkgs-unstable.lib.nixosSystem {
       inherit system;
       specialArgs = {
         inherit
@@ -42,7 +42,6 @@
       modules = [
         ./${hostname}
         ./users/${username}.nix
-        ./graphical_interface.nix
 
         # intraNetworkModule
       ] ++ extraModules;
