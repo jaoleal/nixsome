@@ -36,7 +36,28 @@
       nixfmt-rfc-style
       nil
       rustup
+      flatpak
+      gnome-software
     ];
+  };
+  services.flatpak.enable = true;
+  systemd.services.flatpak-repo = {
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.flatpak ];
+    script = ''
+      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      flatpak update 
+      flatpak install --or-update -y flathub com.ultimaker.cura
+      flatpak install --or-update -y flathub com.discordapp.Discord
+      flatpak install --or-update -y flathub org.signal.Signal
+      flatpak install --or-update -y flathub org.blender.Blender
+      flatpak install --or-update -y flathub net.codelogistics.webapps
+      flatpak install --or-update -y flathub io.wasabiwallet.WasabiWallet
+      flatpak install --or-update -y flathub org.torproject.torbrowser-launcher
+      flatpak install --or-update -y flathub me.proton.Mail
+      flatpak install --or-update -y flathub me.proton.Pass
+      flatpak install --or-update -y flathub com.protonvpn.www
+    '';
   };
 
   home-manager.users.${username} = {
