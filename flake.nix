@@ -60,7 +60,7 @@
       url = "github:nix-community/nixos-vscode-server";
     };
     nixpkgs-unstable = {
-      url = "github:nixos/nixpkgs-channels/nixos-unstable";
+      url = "github:nixos/nixpkgs/nixos-unstable";
     };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
