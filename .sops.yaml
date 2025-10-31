@@ -1,0 +1,7 @@
+keys:
+  - &jaoleal bfdc25cf66cdc57048512721be02058326a9b6f4
+creation_rules:
+  - path_regex: .*
+    key_groups:
+    - pgp:
+      - *jaoleal
