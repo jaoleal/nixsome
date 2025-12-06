@@ -7,25 +7,6 @@
 }:
 {
   system.stateVersion = stateVersion;
-  users = {
-    users.service-runner = {
-      isNormalUser = true;
-      linger = true;
-      name = "service-runner";
-      description = "service-runner, user that owns backservices";
-      extraGroups = [
-        "networkmanager"
-        "wheel"
-        "libvirtd"
-      ];
-    };
-    mutableUsers = true;
-    groups.libvirtd.members = [
-      "service-runner"
-      username
-    ];
-  };
-
   services = {
     openssh = {
       enable = true;
@@ -60,42 +41,26 @@
     curl
     direnv
     alacritty
+
   ];
+
   services.tailscale.enable = true;
+
   services.sunshine = {
     enable = true;
     autoStart = true;
     capSysAdmin = true;
     openFirewall = true;
   };
-  services.xserver = {
-    videoDrivers = [ "amdgpu" ];
-    enable = true;
 
+  services = { 
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
-
+    xserver = {
+      videoDrivers = [ "amdgpu" ];
+      enable = true;
+    };
   };
-  environment.gnome.excludePackages = (
-    with pkgs;
-    [
-      atomix # puzzle game
-      cheese # webcam tool
-      epiphany # web browser
-      evince # document viewer
-      geary # email reader
-      gedit # text editor
-      gnome-characters
-      gnome-music
-      gnome-photos
-      gnome-terminal
-      gnome-tour
-      hitori # sudoku game
-      iagno # go game
-      tali # poker game
-      totem # video player
-    ]
-  );
 
   nixpkgs.config.allowUnfree = true;
 
@@ -141,12 +106,15 @@
     targets.hybrid-sleep.enable = false;
     network.wait-online.enable = false;
   };
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+
+   # Export systemd metrics on localhost:9558
+
 
   boot = {
+
+    kernelParams = [
+      "video=HDMI-0:2560x1440@60"
+    ];
 
     loader = {
       grub = {
