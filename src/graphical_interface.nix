@@ -48,39 +48,4 @@
 
       ]
     );
-  # Install required packages for extensions and GNOME functionality
-  environment.systemPackages =
-    let
-      gnome-extensions = with pkgs.gnomeExtensions; [
-        wireguard-vpn-extension
-        blur-my-shell
-        caffeine
-        dash-to-dock
-        removable-drive-menu
-        tiling-assistant
-        vitals
-      ];
-    in
-    with pkgs;
-    [
-      
-      # Extension requirements
-      glib # Required for GSettings and various GNOME extensions
-      gtk3 # GTK3 libraries
-      gtk4 # GTK4 libraries for newer extensions
-      libgtop # System monitoring library (required for Vitals)
-      lm_sensors
-      hddtemp
-      udisks
-      upower
-      networkmanager
-      gnome-tweaks
-      dconf-editor
-    ];
-  # Programs that complement the setup
-  programs = {
-    # Gaming mode support (for GameBar overlay)
-    gamemode.enable = true;
-  };
-
 }
