@@ -16,6 +16,10 @@ check target:
     @just _set-sysconf
     nix flake check /etc/nixos#{{target}}
 
+zed path=".":
+    nix-shell -p zed-editor --run "zeditor {{path}}"
+
+
 # Build and run a vm
 try target:
     nixos-rebuild build-vm --flake .#{{target}}
