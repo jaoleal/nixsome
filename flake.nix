@@ -6,7 +6,7 @@
       src = import ./src { };
 
       system = "x86_64-linux";
-      stateVersion = "25.05";
+      stateVersion = "25.11";
     in
     {
       nixosConfigurations = {
@@ -29,6 +29,16 @@
             inputs.home-manager.nixosModules.home-manager
           ];
         };
+        galaxy-book = src.buildNixos {
+          inherit inputs system stateVersion;
+
+          hostname = "galaxy-book";
+          username = "jaoleal";
+          extraModules = [
+            inputs.home-manager.nixosModules.home-manager
+          ];
+        };
+
         floresta-mini-node = src.buildNixos {
           inherit inputs system stateVersion;
 
@@ -44,7 +54,7 @@
 
   inputs = {
     nixpkgs = {
-      url = "github:nixos/nixpkgs/nixos-25.05";
+      url = "github:nixos/nixpkgs/nixos-25.11";
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
@@ -56,7 +66,7 @@
       url = "github:nix-community/NixOS-WSL/main";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
     };
   };
 }

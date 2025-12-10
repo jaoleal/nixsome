@@ -45,7 +45,8 @@
         ./graphical_interface.nix
 
         # intraNetworkModule
-      ] ++ extraModules;
+      ]
+      ++ extraModules;
     };
 
 }
