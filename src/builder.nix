@@ -5,12 +5,12 @@
       hostname,
       username,
       inputs,
-      userland ? true,
       system ? "x86_64-linux",
       stateVersion ? "24.05",
       extraModules ? [ ],
     }:
     let
+
       pkgs = import inputs.nixpkgs {
         inherit system;
 
@@ -22,7 +22,6 @@
 
         config.allowUnfree = true;
       };
-
       #intraNetworkModule = import ./intra-network.nix;
 
     in
@@ -42,10 +41,10 @@
       modules = [
         ./${hostname}
         ./users/${username}.nix
-        ./graphical_interface.nix
 
         # intraNetworkModule
-      ] ++ extraModules;
+      ]
+      ++ extraModules;
     };
 
 }
