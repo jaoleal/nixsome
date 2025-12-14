@@ -6,6 +6,10 @@
   ...
 }:
 {
+  networking = {
+    hostName = hostname;
+  };
+
   system.stateVersion = stateVersion;
   services = {
     openssh = {
@@ -41,7 +45,6 @@
     curl
     direnv
     alacritty
-
   ];
 
   services.tailscale.enable = true;
@@ -111,14 +114,7 @@
     network.wait-online.enable = false;
   };
 
-  # Export systemd metrics on localhost:9558
-
   boot = {
-
-    kernelParams = [
-      "video=HDMI-0:2560x1440@60"
-    ];
-
     loader = {
       grub = {
         enable = true;

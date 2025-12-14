@@ -57,7 +57,7 @@
     path = [ pkgs.flatpak ];
     script = ''
       flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-      flatpak update 
+      flatpak update
       flatpak install --or-update -y flathub com.ultimaker.cura
       flatpak install --or-update -y flathub com.discordapp.Discord
       flatpak install --or-update -y flathub org.signal.Signal
@@ -76,23 +76,6 @@
   };
 
   services.udev.packages = with pkgs; [ gnome-settings-daemon ];
-
-  services.flatpak.enable = true;
-  systemd.services.flatpak-repo = {
-    wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.flatpak ];
-    script = ''
-      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-      flatpak update
-      flatpak install --or-update -y flathub com.ultimaker.cura
-      flatpak install --or-update -y flathub com.discordapp.Discord
-      flatpak install --or-update -y flathub org.signal.Signal
-      flatpak install --or-update -y flathub org.blender.Blender
-      flatpak install --or-update -y flathub net.codelogistics.webapps
-      flatpak install --or-update -y flathub io.wasabiwallet.WasabiWallet
-      flatpak install --or-update -y flathub org.torproject.torbrowser-launcher
-    '';
-  };
 
   home-manager.users.${username} = {
     home = {
