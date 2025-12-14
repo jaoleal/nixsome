@@ -16,6 +16,7 @@
           hostname = "backend";
           username = "jaoleal";
           extraModules = [
+            inputs.disko.nixosModules.disko
             inputs.sops-nix.nixosModules.sops
             inputs.home-manager.nixosModules.home-manager
           ];
@@ -60,7 +61,11 @@
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
     };
-    sops-nix ={
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
