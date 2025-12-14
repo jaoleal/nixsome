@@ -51,16 +51,6 @@
       gnomeExtensions.dash-to-panel
     ];
   };
-
-  services.xserver.enable = true;
-
-  services = {
-    desktopManager.gnome.enable = true;
-    displayManager.gdm.enable = true;
-  };
-
-  services.udev.packages = with pkgs; [ gnome-settings-daemon ];
-
   services.flatpak.enable = true;
   systemd.services.flatpak-repo = {
     wantedBy = [ "multi-user.target" ];
@@ -77,6 +67,15 @@
       flatpak install --or-update -y flathub org.torproject.torbrowser-launcher
     '';
   };
+
+  services.xserver.enable = true;
+
+  services = {
+    desktopManager.gnome.enable = true;
+    displayManager.gdm.enable = true;
+  };
+
+  services.udev.packages = with pkgs; [ gnome-settings-daemon ];
 
   home-manager.users.${username} = {
     home = {

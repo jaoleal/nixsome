@@ -91,17 +91,17 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1611574965,
-        "narHash": "sha256-IYtGS077nJFIqSq6Cb8WEJwbqqd4K7S4vUuwPZKfLeo=",
+        "lastModified": 1765472234,
+        "narHash": "sha256-9VvC20PJPsleGMewwcWYKGzDIyjckEz8uWmT0vCDYK0=",
         "owner": "nixos",
-        "repo": "nixpkgs-channels",
-        "rev": "4762fba469e2baa82f983b262e2c06ac2fdaae67",
+        "repo": "nixpkgs",
+        "rev": "2fbfb1d73d239d2402a8fe03963e37aab15abe8b",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs-channels",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -157,7 +157,28 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "sops-nix": "sops-nix",
         "vscode-server": "vscode-server"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1760998189,
+        "narHash": "sha256-ee2e1/AeGL5X8oy/HXsZQvZnae6XfEVdstGopKucYLY=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "5a7d18b5c55642df5c432aadb757140edfeb70b3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "type": "github"
       }
     },
     "systems": {
