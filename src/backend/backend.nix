@@ -53,7 +53,7 @@
     openFirewall = true;
   };
 
-  services = { 
+  services = {
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
     xserver = {
@@ -63,6 +63,10 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   time.timeZone = "America/Sao_Paulo";
   services.xserver.xkb = {
@@ -107,8 +111,7 @@
     network.wait-online.enable = false;
   };
 
-   # Export systemd metrics on localhost:9558
-
+  # Export systemd metrics on localhost:9558
 
   boot = {
 
