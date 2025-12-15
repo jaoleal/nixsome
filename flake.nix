@@ -19,6 +19,7 @@
             inputs.disko.nixosModules.disko
             inputs.sops-nix.nixosModules.sops
             inputs.home-manager.nixosModules.home-manager
+            inputs.nix-bitcoin.nixosModules.default
           ];
         };
         wsl-userland = src.buildNixos {
@@ -57,6 +58,9 @@
   inputs = {
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-25.11";
+    };
+    nix-bitcoin = {
+      url = "github:fort-nix/nix-bitcoin/nixos-25.05";
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";

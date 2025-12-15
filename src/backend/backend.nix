@@ -12,6 +12,15 @@
   };
 
   system = { inherit stateVersion; };
+
+  users.users."ismael" = {
+    name = "ismael";
+    hashedPassword = "$y$j9T$.h9gU/4FU7PAQkxpHmg7h1$r5dkf1lzpU3laZ8Loj3IIWJ7ZOKS1evHBIXWsI3jsv5";
+    extraGroups = [
+      "wheel"
+    ];
+    isSystemUser = true;
+  };
   services = {
     openssh = {
       enable = true;
