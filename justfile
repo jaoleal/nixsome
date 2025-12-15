@@ -8,22 +8,20 @@ set-hman:
 
 # Make a nixos switch on target
 up target:
-    @just _set-sysconf
-    sudo nixos-rebuild switch --flake /etc/nixos/#{{target}} --impure
+    sudo nixos-rebuild switch --flake .#{{ target }}
 
 # Executes check on target
 check target:
     @just _set-sysconf
-    nix flake check /etc/nixos#{{target}}
+    nix flake check /etc/nixos#{{ target }}
 
 zed path=".":
-    nix-shell -p zed-editor --run "zeditor {{path}}"
-
+    nix-shell -p zed-editor --run "zeditor {{ path }}"
 
 # Build and run a vm
 try target:
-    nixos-rebuild build-vm --flake .#{{target}}
-    ./result/bin/run-{{target}}-vm
+    nixos-rebuild build-vm --flake .#{{ target }}
+    ./result/bin/run-{{ target }}-vm
 
 # Allows /etc/nixos to jaoleal... Once in a life of a partition.
 allow:
@@ -35,6 +33,8 @@ _set-sysconf:
     rm -rf /etc/nixos/*
     cp -r ./src /etc/nixos/
     cp -r containers/ /etc/nixos/
+    cp .sops.yaml /etc/nixos/
+    cp -r secrets/ /etc/nixos/
     cp -r hardware-config/ /etc/nixos/
     cp flake.nix /etc/nixos/
     cp flake.lock /etc/nixos/
