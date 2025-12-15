@@ -3,33 +3,29 @@
   username,
   hostname,
   stateVersion,
+  config,
   ...
 }:
 {
-  system.stateVersion = stateVersion;
-  users = {
-    users.service-runner = {
-      isNormalUser = true;
-      linger = true;
-      name = "service-runner";
-      description = "service-runner, user that owns backservices";
-      extraGroups = [
-        "networkmanager"
-        "wheel"
-        "libvirtd"
-      ];
-    };
-    mutableUsers = true;
-    groups.libvirtd.members = [
-      "service-runner"
-      username
-    ];
+  networking = {
+    hostName = hostname;
   };
 
+  system = { inherit stateVersion; };
+
+  users.users."ismael" = {
+    name = "ismael";
+    hashedPassword = "$y$j9T$.h9gU/4FU7PAQkxpHmg7h1$r5dkf1lzpU3laZ8Loj3IIWJ7ZOKS1evHBIXWsI3jsv5";
+    extraGroups = [
+      "wheel"
+    ];
+    isSystemUser = true;
+  };
   services = {
     openssh = {
       enable = true;
       ports = [ 22 ];
+      openFirewall = true;
       settings = {
         PasswordAuthentication = true;
         UseDns = true;
@@ -61,43 +57,39 @@
     direnv
     alacritty
   ];
-  services.tailscale.enable = true;
+
+  sops = {
+    age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+
+    secrets.tailscale_authkey.sopsFile = ../../secrets/sec.yaml;
+  };
+
+  services.tailscale = {
+    enable = true;
+    authKeyFile = config.sops.secrets.tailscale_authkey.path;
+  };
+
   services.sunshine = {
     enable = true;
     autoStart = true;
     capSysAdmin = true;
     openFirewall = true;
   };
-  services.xserver = {
-    videoDrivers = [ "amdgpu" ];
-    enable = true;
 
+  services = {
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
-
+    xserver = {
+      videoDrivers = [ "amdgpu" ];
+      enable = true;
+    };
   };
-  environment.gnome.excludePackages = (
-    with pkgs;
-    [
-      atomix # puzzle game
-      cheese # webcam tool
-      epiphany # web browser
-      evince # document viewer
-      geary # email reader
-      gedit # text editor
-      gnome-characters
-      gnome-music
-      gnome-photos
-      gnome-terminal
-      gnome-tour
-      hitori # sudoku game
-      iagno # go game
-      tali # poker game
-      totem # video player
-    ]
-  );
 
   nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   time.timeZone = "America/Sao_Paulo";
   services.xserver.xkb = {
@@ -135,19 +127,22 @@
         ];
         domains = [ "snake-mooneye.ts.net" ];
       };
-
     };
     targets.hibernate.enable = false;
     targets.hybrid-sleep.enable = false;
     network.wait-online.enable = false;
   };
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+
+  networking = {
+    nftables.enable = true;
+
+    firewall = {
+      enable = true;
+      trustedInterfaces = [ "tailscale0" ];
+    };
+  };
 
   boot = {
-
     loader = {
       grub = {
         enable = true;

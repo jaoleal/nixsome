@@ -1,5 +1,6 @@
 { ... }:
 {
+
   buildNixos =
     {
       hostname,
@@ -10,22 +11,16 @@
       extraModules ? [ ],
     }:
     let
-
-      pkgs = import inputs.nixpkgs {
+      # Use the same nixpkgs that provides lib.nixosSystem to avoid mismatches.
+      pkgs = import inputs.nixpkgs-unstable {
         inherit system;
-
         config.allowUnfree = true;
       };
 
-      unstablePkgs = import inputs.nixpkgs-unstable {
-        inherit system;
-
-        config.allowUnfree = true;
-      };
-      #intraNetworkModule = import ./intra-network.nix;
+      unstablePkgs = pkgs; # optional alias, since we already use unstable pkgs
 
     in
-    inputs.nixpkgs.lib.nixosSystem {
+    inputs.nixpkgs-unstable.lib.nixosSystem {
       inherit system;
       specialArgs = {
         inherit
@@ -41,10 +36,8 @@
       modules = [
         ./${hostname}
         ./users/${username}.nix
-
-        # intraNetworkModule
-      ]
-      ++ extraModules;
+      ] ++ extraModules;
     };
+
 
 }
