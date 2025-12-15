@@ -1,7 +1,10 @@
 keys:
   - &jaoleal bfdc25cf66cdc57048512721be02058326a9b6f4
+  - &jaoleal_age age1d3g6mnywul6ntx5tvtsy7nsu3jcfctuaevt0z553k2x5p6ejhf5q2pyhcy
 creation_rules:
   - path_regex: .*
     key_groups:
-    - pgp:
-      - *jaoleal
+      - pgp:
+          - *jaoleal
+        age:
+          - *jaoleal_age

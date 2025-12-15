@@ -3,6 +3,7 @@
   username,
   hostname,
   stateVersion,
+  config,
   ...
 }:
 {
@@ -15,6 +16,7 @@
     openssh = {
       enable = true;
       ports = [ 22 ];
+      openFirewall = true;
       settings = {
         PasswordAuthentication = true;
         UseDns = true;
@@ -47,7 +49,16 @@
     alacritty
   ];
 
-  services.tailscale.enable = true;
+  sops = {
+    age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+
+    secrets.tailscale_authkey.sopsFile = ../../secrets/sec.yaml;
+  };
+
+  services.tailscale = {
+    enable = true;
+    authKeyFile = config.sops.secrets.tailscale_authkey.path;
+  };
 
   services.sunshine = {
     enable = true;
@@ -107,11 +118,19 @@
         ];
         domains = [ "snake-mooneye.ts.net" ];
       };
-
     };
     targets.hibernate.enable = false;
     targets.hybrid-sleep.enable = false;
     network.wait-online.enable = false;
+  };
+
+  networking = {
+    nftables.enable = true;
+
+    firewall = {
+      enable = true;
+      trustedInterfaces = [ "tailscale0" ];
+    };
   };
 
   boot = {
