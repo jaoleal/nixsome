@@ -88,7 +88,7 @@
       file = { };
 
       sessionVariables = {
-        CARGO_BUILD_JOBS = 4;
+        CARGO_BUILD_JOBS = "$(nproc)";
         EDITOR = "zeditor --wait";
       };
 
