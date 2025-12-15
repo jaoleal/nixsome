@@ -10,7 +10,7 @@
     hostName = hostname;
   };
 
-  system.stateVersion = stateVersion;
+  system = { inherit stateVersion; };
   services = {
     openssh = {
       enable = true;
