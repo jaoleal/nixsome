@@ -90,8 +90,11 @@
       sessionVariables = {
         CARGO_BUILD_JOBS = "$(nproc)";
         EDITOR = "zeditor --wait";
-      };
 
+      };
+      shellAliases = {
+        z = "zeditor";
+      };
     };
 
     dconf = {
@@ -191,7 +194,7 @@
             name = username;
           };
 
-          core.excludeFiles = [ ".envrc" ];
+          core.excludesFiles = [ ".envrc" ];
         };
       };
 
