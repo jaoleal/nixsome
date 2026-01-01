@@ -51,6 +51,23 @@
       gnomeExtensions.dash-to-panel
     ];
   };
+  services.flatpak.enable = true;
+
+  # systemd.services.flatpak-repo = {
+  #   wantedBy = [ "multi-user.target" ];
+  #   path = [ pkgs.flatpak ];
+  #   script = ''
+  #     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  #     flatpak update
+  #     flatpak install --or-update -y flathub com.ultimaker.cura
+  #     flatpak install --or-update -y flathub com.discordapp.Discord
+  #     flatpak install --or-update -y flathub org.signal.Signal
+  #     flatpak install --or-update -y flathub org.blender.Blender
+  #     flatpak install --or-update -y flathub net.codelogistics.webapps
+  #     flatpak install --or-update -y flathub io.wasabiwallet.WasabiWallet
+  #     flatpak install --or-update -y flathub org.torproject.torbrowser-launcher
+  #   '';
+  # };
 
   services.xserver.enable = true;
 
@@ -60,23 +77,6 @@
   };
 
   services.udev.packages = with pkgs; [ gnome-settings-daemon ];
-
-  services.flatpak.enable = true;
-  systemd.services.flatpak-repo = {
-    wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.flatpak ];
-    script = ''
-      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-      flatpak update
-      flatpak install --or-update -y flathub com.ultimaker.cura
-      flatpak install --or-update -y flathub com.discordapp.Discord
-      flatpak install --or-update -y flathub org.signal.Signal
-      flatpak install --or-update -y flathub org.blender.Blender
-      flatpak install --or-update -y flathub net.codelogistics.webapps
-      flatpak install --or-update -y flathub io.wasabiwallet.WasabiWallet
-      flatpak install --or-update -y flathub org.torproject.torbrowser-launcher
-    '';
-  };
 
   home-manager.users.${username} = {
     home = {
@@ -88,10 +88,13 @@
       file = { };
 
       sessionVariables = {
-        CARGO_BUILD_JOBS = 4;
+        CARGO_BUILD_JOBS = "$(nproc)";
         EDITOR = "zeditor --wait";
-      };
 
+      };
+      shellAliases = {
+        z = "zeditor";
+      };
     };
 
     dconf = {
@@ -191,7 +194,7 @@
             name = username;
           };
 
-          core.excludeFiles = [ ".envrc" ];
+          core.excludesFiles = [ ".envrc" ];
         };
       };
 
@@ -199,7 +202,7 @@
         enable = true;
         extraPackages = with pkgs; [
           rustup
-          nixd
+          nil
           nixfmt-rfc-style
           bash-language-server
           shellcheck
