@@ -7,10 +7,6 @@
   ...
 }:
 {
-  networking = {
-    hostName = hostname;
-  };
-
   system = { inherit stateVersion; };
 
   users.users."ismael" = {
@@ -77,7 +73,18 @@
   };
 
   services = {
-    displayManager.gdm.enable = true;
+    displayManager = {
+      autoLogin = {
+        enable = true;
+        user = "jaoleal";
+      };
+
+      gdm = {
+        enable = true;
+        wayland = true;
+        autoSuspend = false;
+      };
+    };
     desktopManager.gnome.enable = true;
     xserver = {
       videoDrivers = [ "amdgpu" ];
@@ -97,6 +104,7 @@
     variant = " ";
   };
 
+
   security.rtkit.enable = true;
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -112,8 +120,7 @@
     targets.suspend.enable = false;
     network = {
       enable = true;
-      networks."10-lan" = {
-        matchConfig.Name = "lan";
+      networks."wlp5s0" = {
         networkConfig.DHCP = "ipv4";
         dhcpV4Config = {
           UseDNS = false;
@@ -133,12 +140,38 @@
     network.wait-online.enable = false;
   };
 
+  services.dnsmasq = {
+    enable = true;
+    settings = {
+      interface = "enp6s0";
+      bind-interfaces = true;
+      dhcp-range = "192.168.100.50,192.168.100.150,24h";
+      dhcp-option = [
+        "3,192.168.100.1"
+        "6,192.168.100.1"
+      ];
+      server = [ "8.8.8.8" "8.8.4.4" ];
+    };
+  };
+
   networking = {
-    nftables.enable = true;
+    hostName = hostname;
+    nat = {
+      enable = true;
+      externalInterface = "wlp5s0";
+      internalInterfaces = [ "enp6s0" ];
+    };
+
+    interfaces.enp6s0 = {
+      ipv4.addresses = [{
+        address = "192.168.100.1";
+        prefixLength = 24;
+      }];
+    };
 
     firewall = {
       enable = true;
-      trustedInterfaces = [ "tailscale0" ];
+      trustedInterfaces = [ "tailscale0" "enp6s0" ];
     };
   };
 
@@ -151,6 +184,13 @@
       };
       efi.canTouchEfiVariables = true;
     };
+
+    kernel.sysctl = {
+      "net.ipv4.ip_forward" = 1;
+    };
+    kernelParams = [
+      "video=HDMI-A-1:1920x1080@60"
+    ];
 
     kernelPackages = pkgs.linuxPackages;
 
