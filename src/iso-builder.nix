@@ -15,8 +15,13 @@
         config.allowUnfree = true;
       };
 
+      unstablePkgs = pkgs;
+
       # Import the base configuration's modules
       baseConfigPath = ./${baseConfig};
+
+      # Use a generic username for ISO
+      username = "nixos";
 
     in
     inputs.nixpkgs-unstable.lib.nixosSystem {
@@ -24,9 +29,11 @@
       specialArgs = {
         inherit
           pkgs
+          unstablePkgs
           inputs
           system
           hostname
+          username
           stateVersion
           ;
       };
@@ -51,6 +58,14 @@
             # Ensure we can build the ISO
             isoImage.makeEfiBootable = true;
             isoImage.makeUsbBootable = true;
+            # Disable some services that might cause issues in ISO
+            services.tailscale.enable = lib.mkForce false;
+            # Use a simple user for the ISO
+            users.users.nixos = {
+              isNormalUser = true;
+              extraGroups = [ "wheel" ];
+              password = "nixos";
+            };
           }
         )
       ];
