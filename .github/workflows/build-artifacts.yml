@@ -16,6 +16,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
   determine-targets:
     runs-on: ubuntu-latest
