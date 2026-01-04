@@ -17,23 +17,34 @@ on:
     types: [published]
 
 jobs:
-  build-iso:
+  determine-targets:
     runs-on: ubuntu-latest
     if: |
       github.event_name == 'workflow_dispatch' && 
       (github.event.inputs.build_type == 'iso-all' || 
        startsWith(github.event.inputs.build_type, 'iso-'))
+    outputs:
+      targets: ${{ steps.set-targets.outputs.targets }}
+    steps:
+      - name: Determine build targets
+        id: set-targets
+        run: |
+          if [ "${{ github.event.inputs.build_type }}" = "iso-all" ]; then
+            echo 'targets=["backend","galaxy-book","floresta-mini-node"]' >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.inputs.build_type }}" = "iso-backend" ]; then
+            echo 'targets=["backend"]' >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.inputs.build_type }}" = "iso-galaxy-book" ]; then
+            echo 'targets=["galaxy-book"]' >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.inputs.build_type }}" = "iso-floresta-mini-node" ]; then
+            echo 'targets=["floresta-mini-node"]' >> $GITHUB_OUTPUT
+          fi
+
+  build-iso:
+    needs: determine-targets
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: 
-          - ${{ github.event.inputs.build_type == 'iso-all' && 'backend' || '' }}
-          - ${{ github.event.inputs.build_type == 'iso-all' && 'galaxy-book' || '' }}
-          - ${{ github.event.inputs.build_type == 'iso-all' && 'floresta-mini-node' || '' }}
-          - ${{ github.event.inputs.build_type == 'iso-backend' && 'backend' || '' }}
-          - ${{ github.event.inputs.build_type == 'iso-galaxy-book' && 'galaxy-book' || '' }}
-          - ${{ github.event.inputs.build_type == 'iso-floresta-mini-node' && 'floresta-mini-node' || '' }}
-        exclude:
-          - target: ''
+        target: ${{ fromJson(needs.determine-targets.outputs.targets) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

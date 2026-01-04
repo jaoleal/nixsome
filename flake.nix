@@ -80,7 +80,12 @@
 
       # WSL Tarball export
       packages.${system} = {
-        wsl-tarball = self.nixosConfigurations.wsl-userland.config.system.build.tarball or null;
+        # WSL tarball - may be null if wsl-userland doesn't provide tarball output
+        # Use: nix build .#packages.x86_64-linux.wsl-tarball
+        wsl-tarball = 
+          if (self.nixosConfigurations.wsl-userland.config.system.build ? tarball)
+          then self.nixosConfigurations.wsl-userland.config.system.build.tarball
+          else null;
         
         # Placeholder for future portable apps
         example-script = inputs.nixpkgs-unstable.legacyPackages.${system}.writeShellApplication {

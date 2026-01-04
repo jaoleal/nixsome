@@ -60,11 +60,12 @@
             isoImage.makeUsbBootable = true;
             # Disable some services that might cause issues in ISO
             services.tailscale.enable = lib.mkForce false;
-            # Use a simple user for the ISO
+            # Use a simple user for the ISO with empty password for live environment
             users.users.nixos = {
               isNormalUser = true;
               extraGroups = [ "wheel" ];
-              password = "nixos";
+              # Empty initial password for live ISO - user should set password after installation
+              initialPassword = "";
             };
           }
         )
