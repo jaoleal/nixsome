@@ -1,9 +1,6 @@
 { ... }:
 {
   buildNixos = (import ./builder.nix {}).buildNixos;
-  imports = [
-    ./graphical_minimal.nix
-    ./graphical_standard.nix
-  ];
-
+  buildNixosISO = (import ./iso-builder.nix {}).buildNixosISO;
 }
+

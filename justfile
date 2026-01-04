@@ -1,6 +1,34 @@
 default:
     @just --list
 
+# Run CI checks locally
+ci:
+    @echo "Running CI checks..."
+    nix flake check
+    @echo "Building all configurations..."
+    nix build .#nixosConfigurations.backend.config.system.build.toplevel
+    nix build .#nixosConfigurations.wsl-userland.config.system.build.toplevel
+    nix build .#nixosConfigurations.galaxy-book.config.system.build.toplevel
+    nix build .#nixosConfigurations.floresta-mini-node.config.system.build.toplevel
+    @echo "Checking formatting..."
+    nix fmt -- --check .
+
+# Format all Nix files
+fmt:
+    nix fmt
+
+# Update flake.lock
+update:
+    nix flake update
+
+# Build hardened ISO for a target (backend, galaxy-book, or floresta-mini-node)
+build-iso target:
+    nix build .#nixosConfigurations.{{ target }}-iso.config.system.build.isoImage
+
+# Build WSL tarball
+build-wsl:
+    nix build .#packages.x86_64-linux.wsl-tarball
+
 # Set the last home-manager generation to active.
 set-hman:
     @just _set-homeconf
@@ -45,3 +73,4 @@ _set-homeconf:
     rm -rf ~/.config/home-manager
     mkdir -p ~/.config/home-manager
     cp -r ./src/home.nix ~/.config/home-manager/
+

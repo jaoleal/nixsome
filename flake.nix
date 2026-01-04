@@ -9,6 +9,8 @@
       stateVersion = "25.11";
     in
     {
+      formatter.${system} = inputs.nixpkgs-unstable.legacyPackages.${system}.nixfmt-rfc-style;
+
       nixosConfigurations = {
         backend = src.buildNixos {
           inherit inputs system stateVersion;
@@ -52,6 +54,56 @@
             inputs.home-manager.nixosModules.home-manager
           ];
         };
+
+        # Hardened ISO configurations
+        backend-iso = src.buildNixosISO {
+          inherit inputs system stateVersion;
+          hostname = "backend-iso";
+          baseConfig = "backend";
+          hardened = true;
+        };
+
+        galaxy-book-iso = src.buildNixosISO {
+          inherit inputs system stateVersion;
+          hostname = "galaxy-book-iso";
+          baseConfig = "galaxy-book";
+          hardened = true;
+        };
+
+        floresta-mini-node-iso = src.buildNixosISO {
+          inherit inputs system stateVersion;
+          hostname = "floresta-mini-node-iso";
+          baseConfig = "floresta-mini-node";
+          hardened = true;
+        };
+      };
+
+      # WSL Tarball export
+      packages.${system} = {
+        # WSL tarball - may be null if wsl-userland doesn't provide tarball output
+        # Use: nix build .#packages.x86_64-linux.wsl-tarball
+        wsl-tarball =
+          if (self.nixosConfigurations.wsl-userland.config.system.build ? tarball) then
+            self.nixosConfigurations.wsl-userland.config.system.build.tarball
+          else
+            null;
+
+        # Placeholder for future portable apps
+        example-script = inputs.nixpkgs-unstable.legacyPackages.${system}.writeShellApplication {
+          name = "example-script";
+          text = ''
+            echo "This is an example script from nixsome!"
+            echo "Usage: nix run github:jaoleal/nixsome#example-script"
+          '';
+        };
+      };
+
+      # Apps output for nix run
+      apps.${system} = {
+        example-script = {
+          type = "app";
+          program = "${self.packages.${system}.example-script}/bin/example-script";
+        };
       };
     };
 
@@ -81,6 +133,9 @@
     };
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
+    };
+    floresta = {
+      url = "github:vinteumorg/Floresta";
     };
   };
 }
