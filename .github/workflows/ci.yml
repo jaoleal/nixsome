@@ -20,7 +20,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v14
 
       - name: Setup Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v8
+        uses: DeterminateSystems/magic-nix-cache-action@v13
 
       - name: Check Nix flake
         run: nix flake check --all-systems
@@ -42,7 +42,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v14
 
       - name: Setup Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v8
+        uses: DeterminateSystems/magic-nix-cache-action@v13
 
       - name: Build NixOS configuration - ${{ matrix.config }}
         run: nix build .#nixosConfigurations.${{ matrix.config }}.config.system.build.toplevel
@@ -57,7 +57,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v14
 
       - name: Setup Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v8
+        uses: DeterminateSystems/magic-nix-cache-action@v13
 
       - name: Check formatting
         run: |
