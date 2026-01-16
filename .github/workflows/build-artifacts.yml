@@ -63,7 +63,7 @@ jobs:
           nix build .#nixosConfigurations.${{ matrix.target }}-iso.config.system.build.isoImage
 
       - name: Upload ISO artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: nixos-${{ matrix.target }}-iso
           path: result/iso/*.iso
@@ -89,7 +89,7 @@ jobs:
           nix build .#packages.x86_64-linux.wsl-tarball
 
       - name: Upload WSL tarball artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: nixos-wsl-tarball
           path: result/tarball/*.tar.gz
