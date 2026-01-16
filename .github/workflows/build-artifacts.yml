@@ -50,7 +50,7 @@ jobs:
         target: ${{ fromJson(needs.determine-targets.outputs.targets) }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v14
@@ -76,7 +76,7 @@ jobs:
       github.event.inputs.build_type == 'wsl-tarball'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v14
