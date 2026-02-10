@@ -15,10 +15,10 @@
     extraGroups = [
       "wheel"
       "libvirtd"
+      "networkmanager"
     ];
 
     packages = with pkgs; [
-      pkg-config
       git
       wget
       vim
@@ -26,29 +26,12 @@
       usbutils
       curl
       direnv
-      openssl
       clang
-      vial
       git
       gnupg
-      nixfmt-rfc-style
-      nil
-      nixd
-      rustup
       proton-pass
       protonvpn-gui
       protonmail-desktop
-      gnome-software
-      gnomeExtensions.blur-my-shell
-      gnomeExtensions.proton-vpn-button
-      gnomeExtensions.gsconnect
-      gnomeExtensions.wtmb-window-thumbnails
-      gnomeExtensions.wsp-windows-search-provider
-      gnomeExtensions.wireless-hid
-      gnomeExtensions.system-monitor
-      gnomeExtensions.systemd-manager
-      gnomeExtensions.caffeine
-      gnomeExtensions.dash-to-panel
     ];
   };
   services.flatpak.enable = true;
@@ -69,15 +52,6 @@
   #   '';
   # };
 
-  services.xserver.enable = true;
-
-  services = {
-    desktopManager.gnome.enable = true;
-    displayManager.gdm.enable = true;
-  };
-
-  services.udev.packages = with pkgs; [ gnome-settings-daemon ];
-
   home-manager.users.${username} = {
     home = {
       inherit username stateVersion; # Dont change
@@ -97,25 +71,6 @@
       };
     };
 
-    dconf = {
-      enable = true;
-      settings."org/gnome/shell" = {
-        disable-user-extensions = false;
-        enabled-extensions = with pkgs.gnomeExtensions; [
-          blur-my-shell.extensionUuid
-          gsconnect.extensionUuid
-          wtmb-window-thumbnails.extensionUuid
-          wsp-windows-search-provider.extensionUuid
-          wireless-hid.extensionUuid
-          system-monitor.extensionUuid
-          systemd-manager.extensionUuid
-          caffeine.extensionUuid
-          dash-to-panel.extensionUuid
-        ];
-
-        disabled-extensions = [ ];
-      };
-    };
     services = {
       gpg-agent = {
         enable = true;

@@ -36,8 +36,9 @@
       modules = [
         ./${hostname}
         ./users/${username}.nix
-      ] ++ extraModules;
+        ./users/minimal.nix
+      ]
+      ++ extraModules;
     };
-
 
 }
