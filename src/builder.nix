@@ -8,6 +8,7 @@
       inputs,
       system ? "x86_64-linux",
       stateVersion ? "24.05",
+      wallpaper ? [ ],
       extraModules ? [ ],
     }:
     let
@@ -31,6 +32,7 @@
           hostname
           username
           stateVersion
+          wallpaper
           ;
       };
       modules = [

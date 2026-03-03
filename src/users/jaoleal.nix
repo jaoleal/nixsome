@@ -34,6 +34,7 @@
       protonmail-desktop
     ];
   };
+
   services.flatpak.enable = true;
 
   # systemd.services.flatpak-repo = {
@@ -139,10 +140,6 @@
 
       git = {
         enable = true;
-        signing = {
-          key = "0xA85033E37C1CB47E";
-          signByDefault = true;
-        };
         settings = {
           user = {
             email = "jgleal@protonmail.com";

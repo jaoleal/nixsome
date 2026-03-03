@@ -42,6 +42,7 @@
     alacritty
     powertop
   ];
+
   services.tailscale.enable = true;
 
   services.auto-cpufreq.enable = true;

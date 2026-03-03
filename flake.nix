@@ -39,6 +39,10 @@
 
           hostname = "galaxy-book";
           username = "jaoleal";
+          wallpaper = [
+            "/home/jaoleal/Documents/OhayoWindowsSama.jpg"
+            "/home/jaoleal/Documents/kbumbum.jpg"
+          ];
           extraModules = [
             inputs.home-manager.nixosModules.home-manager
           ];

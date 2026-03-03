@@ -2,6 +2,7 @@
   pkgs,
   lib,
   username,
+  wallpaper ? [ ],
   ...
 }:
 {
@@ -169,22 +170,45 @@
       };
     };
 
-    services.hyprpaper = {
+    services.hyprpaper = lib.mkIf (wallpaper != [ ]) {
       enable = true;
       settings = {
         ipc = "on";
         splash = false;
 
-        preload = [
-          "/home/jaoleal/Documents/kbumbum.jpg"
-          "/home/jaoleal/Documents/OhayoWindowsSama.jpg"
-        ];
+        preload = wallpaper;
 
-        wallpaper = [
-          "DP-1,/home/jaoleal/Documents/OhayoWindowsSama.jpg"
-        ];
+        wallpaper = [ ",${builtins.head wallpaper}" ];
       };
+    };
 
+    systemd.user.services.wallpaper-rotate = lib.mkIf (builtins.length wallpaper > 1) {
+      Unit.Description = "Rotate hyprpaper wallpaper";
+      Service = {
+        Type = "oneshot";
+        ExecStart = toString (
+          pkgs.writeShellScript "wallpaper-rotate" ''
+            WALLPAPERS=(${lib.concatMapStringsSep " " (w: ''"${w}"'') wallpaper})
+            STATE_FILE="$XDG_RUNTIME_DIR/wallpaper-index"
+            INDEX=0
+            if [ -f "$STATE_FILE" ]; then
+              INDEX=$(cat "$STATE_FILE")
+            fi
+            NEXT=$(( (INDEX + 1) % ''${#WALLPAPERS[@]} ))
+            echo "$NEXT" > "$STATE_FILE"
+            hyprctl hyprpaper wallpaper ",''${WALLPAPERS[$NEXT]}"
+          ''
+        );
+      };
+    };
+
+    systemd.user.timers.wallpaper-rotate = lib.mkIf (builtins.length wallpaper > 1) {
+      Unit.Description = "Rotate wallpaper periodically";
+      Timer = {
+        OnActiveSec = "5min";
+        OnUnitActiveSec = "5min";
+      };
+      Install.WantedBy = [ "timers.target" ];
     };
 
     programs.waybar = {
